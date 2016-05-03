@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -103,11 +104,22 @@ namespace MetroModel
                 {
                     Func<string, string> getUnexpectedFormatMessage = description => Invariant($"The input file has an unexpected format: {description}.");
 
-                    string header = reader.ReadLine();
+                    string header;
+                    while ((object)(header = reader.ReadLine()) != null && string.IsNullOrWhiteSpace(header))
+                    {
+                    }
                     if ((object)header == null)
                         throw new UnexpectedFileFormatException(getUnexpectedFormatMessage("the file is empty"));
 
-                    Func<string, string[]> splitLine = line => line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    Func<string, string[]> splitLine = line =>
+                    {
+                        string[] items = line.Split(new char[] { ' ', '\u0009' }, StringSplitOptions.RemoveEmptyEntries);
+                        List<string> newItems = new List<string>(items.Length);
+                        for (int i = 0; i < items.Length; i++)
+                            if (!string.IsNullOrWhiteSpace(items[i]))
+                                newItems.Add(items[i]);
+                        return newItems.ToArray();
+                    };
 
                     string[] headerItems = splitLine(header);
                     if (headerItems.Length == 0)
@@ -159,17 +171,12 @@ namespace MetroModel
 
                         string edgeLine;
                         int edgesProcessed = 0;
-                        while ((object)(edgeLine = reader.ReadLine()) != null)
+                        while (edgesProcessed < metroLineCount && (object)(edgeLine = reader.ReadLine()) != null)
                         {
+                            if (string.IsNullOrWhiteSpace(edgeLine))
+                                continue;
+
                             edgesProcessed++;
-                            if (edgesProcessed > metroLineCount)
-                            {
-                                if (string.IsNullOrWhiteSpace(edgeLine))
-                                    break;
-                                throw new UnexpectedFileFormatException(getUnexpectedFormatMessage(Invariant(
-                                    $"the file contains metro lines count greater than the expected count ({metroLineCount})"
-                                )));
-                            }
 
                             string[] edgeLineItems = splitLine(edgeLine);
                             if (edgeLineItems.Length == 0)
