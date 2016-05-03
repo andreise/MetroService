@@ -170,17 +170,23 @@ namespace GraphModel
                 throw new ArgumentOutOfRangeException(nameof(startVertexIndex), startVertexIndex, "The vertex index must be equal to or greater than zero and less than the graph size.");
 
             var markers = new VertexConnectivityMarker[this.Size];
-            int currentVertexIndex = startVertexIndex;
-            markers[currentVertexIndex] = VertexConnectivityMarker.Reached;
+            HashSet<int> reachedSet = new HashSet<int>();
 
-            do
+            markers[startVertexIndex] = VertexConnectivityMarker.Reached;
+            reachedSet.Add(startVertexIndex);
+            while (reachedSet.Count > 0)
             {
+                int currentVertexIndex = reachedSet.First();
+                markers[currentVertexIndex] = VertexConnectivityMarker.Processed;
+                reachedSet.Remove(currentVertexIndex);
                 for (int column = 0; column < this.Size; column++)
                     if (this.AdjacencyMatrix[currentVertexIndex, column])
                         if (markers[column] == VertexConnectivityMarker.Unreached)
+                        {
                             markers[column] = VertexConnectivityMarker.Reached;
-                markers[currentVertexIndex] = VertexConnectivityMarker.Processed;
-            } while ((currentVertexIndex = Array.FindIndex(markers, marker => marker == VertexConnectivityMarker.Reached)) >= 0);
+                            reachedSet.Add(column);
+                        }
+            }
 
             bool[] boolMarkers = new bool[this.Size];
             for (int i = 0; i < this.Size; i++)
