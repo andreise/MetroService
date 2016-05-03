@@ -163,9 +163,13 @@ namespace MetroModel
                         {
                             edgesProcessed++;
                             if (edgesProcessed > metroLineCount)
+                            {
+                                if (string.IsNullOrWhiteSpace(edgeLine))
+                                    break;
                                 throw new UnexpectedFileFormatException(getUnexpectedFormatMessage(Invariant(
-                                    $"file contains more metro lines than expected count ({metroLineCount})"
+                                    $"the file contains metro lines count greater than the expected count ({metroLineCount})"
                                 )));
+                            }
 
                             string[] edgeLineItems = splitLine(edgeLine);
                             if (edgeLineItems.Length == 0)
