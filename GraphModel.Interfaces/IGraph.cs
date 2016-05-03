@@ -70,15 +70,23 @@ namespace GraphModel
         /// <summary>
         /// Converts the graph to its spanning tree
         /// </summary>
+        /// <param name="startVertexIndex">The start vertex index</param>
         /// <exception cref="InvalidOperationException">Throws if the graph is a null or is not a connected graph</exception>
-        void ConvertToSpanningTree();
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the start vertex index is less than zero or equals to or greater than the graph size</exception>
+        void ConvertToSpanningTree(int startVertexIndex);
 
         /// <summary>
         /// Converts the graph to its spanning tree and calculates a vertex deleting sequence for the connected graph
         /// </summary>
+        /// <param name="startVertexIndex">The start vertex index</param>
         /// <returns>Returns a vertex deleting sequence for the connected graph</returns>
-        /// <exception cref="InvalidOperationException">Throws if the graph is a null or is not a connected graph</exception>
-        int[] ConvertToSpanningTreeAndGetVertexDeletingSequenceForConnectedGraph();
+        /// <exception cref="InvalidOperationException">
+        /// Throws if the graph is a null or is not a connected graph, or the graph is in an unexpected invalid state
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Throws if the start vertex index is less than zero or equals to or greater than the graph size
+        /// </exception>
+        int[] ConvertToSpanningTreeAndGetVertexDeletingSequenceForConnectedGraph(int startVertexIndex);
 
         /// <summary>
         /// The Adjacency Matrix

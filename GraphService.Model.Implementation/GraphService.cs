@@ -250,7 +250,7 @@ namespace GraphService.Model
         public string GetSpanningTree(string inputXml)
         {
             IGraph graph = LoadGraphFromXml(inputXml);
-            graph.ConvertToSpanningTree();
+            graph.ConvertToSpanningTree(0);
             return SaveGraphToXml(graph);
         }
 
@@ -261,10 +261,12 @@ namespace GraphService.Model
         /// <returns>Returns a vertex deleting sequence for the connected graph</returns>
         /// <exception cref="ArgumentNullException">Throws if the inputXml is null</exception>
         /// <exception cref="ArgumentException">Throws if the inputXml format is invalid</exception>
-        /// <exception cref="InvalidOperationException">Throws if the graph is a null or is not a connected graph</exception>
+        /// <exception cref="InvalidOperationException">
+        /// Throws if the graph is a null or is not a connected graph, or the graph is in an unexpected invalid state
+        /// </exception>
         public int[] GetVertexDeletingSequenceForConnectedGraph(string inputXml)
         {
-            return LoadGraphFromXml(inputXml).ConvertToSpanningTreeAndGetVertexDeletingSequenceForConnectedGraph();
+            return LoadGraphFromXml(inputXml).ConvertToSpanningTreeAndGetVertexDeletingSequenceForConnectedGraph(0);
         }
 
     }

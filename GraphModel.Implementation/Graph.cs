@@ -172,21 +172,15 @@ namespace GraphModel
             var markers = new VertexConnectivityMarker[this.Size];
             int currentVertexIndex = startVertexIndex;
             markers[currentVertexIndex] = VertexConnectivityMarker.Reached;
+
             do
             {
-                int newCurrentVertexIndex = -1;
                 for (int column = 0; column < this.Size; column++)
                     if (this.AdjacencyMatrix[currentVertexIndex, column])
                         if (markers[column] == VertexConnectivityMarker.Unreached)
-                        {
                             markers[column] = VertexConnectivityMarker.Reached;
-                            if (newCurrentVertexIndex < 0)
-                                newCurrentVertexIndex = column;
-                        }
                 markers[currentVertexIndex] = VertexConnectivityMarker.Processed;
-                currentVertexIndex = newCurrentVertexIndex;
-            }
-            while (currentVertexIndex >= 0);
+            } while ((currentVertexIndex = Array.FindIndex(markers, marker => marker == VertexConnectivityMarker.Reached)) >= 0);
 
             bool[] boolMarkers = new bool[this.Size];
             for (int i = 0; i < this.Size; i++)
@@ -204,23 +198,65 @@ namespace GraphModel
         /// <summary>
         /// Converts the graph to its spanning tree
         /// </summary>
+        /// <param name="startVertexIndex">The start vertex index</param>
         /// <exception cref="InvalidOperationException">Throws if the graph is a null or is not a connected graph</exception>
-        public virtual void ConvertToSpanningTree()
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the start vertex index is less than zero or equals to or greater than the graph size</exception>
+        public virtual void ConvertToSpanningTree(int startVertexIndex)
         {
+            //if (this.Size == 0)
+            //    throw new InvalidOperationException("The graph is a null graph.");
+
+            //if (startVertexIndex < 0 || startVertexIndex >= this.Size)
+            //    throw new ArgumentOutOfRangeException(nameof(startVertexIndex), startVertexIndex, "The vertex index must be equal to or greater than zero and less than the graph size.");
+
             if (!this.IsConnected())
                 throw new InvalidOperationException("The graph is not a connected graph.");
 
-
+            //var markers = new VertexConnectivityMarker[this.Size];
+            //var pathDictionary = new Dictionary<int, int>(this.Size);
+            //int currentVertexIndex = startVertexIndex;
+            //markers[currentVertexIndex] = VertexConnectivityMarker.Reached;
+            //pathDictionary.Add(currentVertexIndex, currentVertexIndex);
+            //do
+            //{
+            //    int newCurrentVertexIndex = -1;
+            //    for (int column = 0; column < this.Size; column++)
+            //        if (this.AdjacencyMatrix[currentVertexIndex, column])
+            //        {
+            //            if (markers[column] == VertexConnectivityMarker.Unreached)
+            //            {
+            //                markers[column] = VertexConnectivityMarker.Reached;
+            //                if (newCurrentVertexIndex < 0)
+            //                {
+            //                    newCurrentVertexIndex = column;
+            //                    pathDictionary.Add(newCurrentVertexIndex, currentVertexIndex);
+            //                }
+            //            }
+            //            else if (markers[column] == VertexConnectivityMarker.Processed && pathDictionary[column] == currentVertexIndex)
+            //            {
+            //                this.AdjacencyMatrix[currentVertexIndex, column] = false;
+            //            }
+            //        }
+            //    markers[currentVertexIndex] = VertexConnectivityMarker.Processed;
+            //    currentVertexIndex = newCurrentVertexIndex;
+            //}
+            //while (currentVertexIndex >= 0);
         }
 
         /// <summary>
         /// Converts the graph to its spanning tree and calculates a vertex deleting sequence for the connected graph
         /// </summary>
+        /// <param name="startVertexIndex">The start vertex index</param>
         /// <returns>Returns a vertex deleting sequence for the connected graph</returns>
-        /// <exception cref="InvalidOperationException">Throws if the graph is a null or is not a connected graph</exception>
-        public virtual int[] ConvertToSpanningTreeAndGetVertexDeletingSequenceForConnectedGraph()
+        /// <exception cref="InvalidOperationException">
+        /// Throws if the graph is a null or is not a connected graph, or the graph is in an unexpected invalid state
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Throws if the start vertex index is less than zero or equals to or greater than the graph size
+        /// </exception>
+        public virtual int[] ConvertToSpanningTreeAndGetVertexDeletingSequenceForConnectedGraph(int startVertexIndex)
         {
-            this.ConvertToSpanningTree();
+            this.ConvertToSpanningTree(startVertexIndex);
 
             HashSet<int> processedVertexSet = new HashSet<int>();
             int[] processedVertexSequence = new int[this.Size];
@@ -239,6 +275,8 @@ namespace GraphModel
             while (processedVertexSet.Count < this.Size - 1)
             {
                 int currentExternalVertexIndex = getFirstExternalVertexIndex();
+                if (currentExternalVertexIndex < 0)
+                    throw new InvalidOperationException("Unexpected Exception: External Vertex Not Found.");
 
                 for (int column = 0; column < this.Size; column++)
                     if (this.AdjacencyMatrix[currentExternalVertexIndex, column])
