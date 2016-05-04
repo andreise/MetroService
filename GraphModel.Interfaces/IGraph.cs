@@ -68,13 +68,13 @@ namespace GraphModel
         bool IsConnected();
 
         /// <summary>
-        /// Calculates the graph spanning tree
+        /// Calculates the graph spanning forest
         /// </summary>
         /// <param name="startVertexIndex">The start vertex index</param>
-        /// <returns>Returns the graph spanning tree</returns>
-        /// <exception cref="InvalidOperationException">Throws if the graph is a null or is not a connected graph</exception>
+        /// <returns>Returns the graph spanning forest</returns>
+        /// <exception cref="InvalidOperationException">Throws if the graph is a null graph</exception>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the start vertex index is less than zero or equals to or greater than the graph size</exception>
-        IGraph<TEdgeChangedEventArgs, TAllEdgesSettedEventArgs> GetSpanningTree(int startVertexIndex);
+        IGraph<TEdgeChangedEventArgs, TAllEdgesSettedEventArgs> GetSpanningForest(int startVertexIndex);
 
         /// <summary>
         /// Calculates a vertex deleting sequence for the connected graph

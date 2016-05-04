@@ -199,13 +199,13 @@ namespace GraphModel
         public virtual bool IsConnected() => this.GetConnectivityMarkers(0).Count(marker => !marker) == 0;
 
         /// <summary>
-        /// Calculates the graph spanning tree
+        /// Calculates the graph spanning forest
         /// </summary>
         /// <param name="startVertexIndex">The start vertex index</param>
-        /// <returns>Returns the graph spanning tree</returns>
-        /// <exception cref="InvalidOperationException">Throws if the graph is a null or is not a connected graph</exception>
+        /// <returns>Returns the graph spanning forest</returns>
+        /// <exception cref="InvalidOperationException">Throws if the graph is a null graph</exception>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the start vertex index is less than zero or equals to or greater than the graph size</exception>
-        public virtual IGraph GetSpanningTree(int startVertexIndex)
+        public virtual IGraph GetSpanningForest(int startVertexIndex)
         {
             if (this.Size == 0)
                 throw new InvalidOperationException("The graph is a null graph.");
@@ -213,17 +213,14 @@ namespace GraphModel
             if (startVertexIndex < 0 || startVertexIndex >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(startVertexIndex), startVertexIndex, "The vertex index must be equal to or greater than zero and less than the graph size.");
 
-            if (!this.IsConnected())
-                throw new InvalidOperationException("The graph is not a connected graph.");
-
             IGraph spanningTree = new Graph(this.Size);
 
             bool[] markers = new bool[this.Size];
-            //do
-            //{
+            do // external cycle for spanning forest searching
+            {
                 Stack<Tuple<int, int>> stack = new Stack<Tuple<int, int>>(); // Item1: vertex index, Item2: from reached vertex index
                 stack.Push(new Tuple<int, int>(startVertexIndex, -1));
-                do
+                do // internal cycle for spanning tree searching
                 {
                     Tuple<int, int> currentVertexInfo = stack.Pop();
 
@@ -243,10 +240,7 @@ namespace GraphModel
                             stack.Push(new Tuple<int, int>(nextVertexIndex, currentVertexInfo.Item1));
                         }
                 } while (stack.Count > 0);
-            //} while ((startVertexIndex = Array.FindIndex(markers, marker => !marker)) >= 0);
-
-            if (!spanningTree.IsConnected())
-                throw new InvalidOperationException("!spanningTree.IsConnected()");
+            } while ((startVertexIndex = Array.FindIndex(markers, marker => !marker)) >= 0);
 
             return spanningTree;
         }
@@ -264,7 +258,16 @@ namespace GraphModel
         /// </exception>
         public virtual int[] GetVertexDeletingSequenceForConnectedGraph(int startVertexIndex)
         {
-            IGraph spanningTree = this.GetSpanningTree(startVertexIndex);
+            if (this.Size == 0)
+                throw new InvalidOperationException("The graph is a null graph.");
+
+            if (startVertexIndex < 0 || startVertexIndex >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(startVertexIndex), startVertexIndex, "The vertex index must be equal to or greater than zero and less than the graph size.");
+
+            if (!this.IsConnected())
+                throw new InvalidOperationException("The graph is not a connected graph.");
+
+            IGraph spanningTree = this.GetSpanningForest(startVertexIndex);
 
             HashSet<int> processedVertexSet = new HashSet<int>();
             int[] processedVertexSequence = new int[spanningTree.Size];

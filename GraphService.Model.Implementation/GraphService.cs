@@ -240,18 +240,18 @@ namespace GraphService.Model
         }
 
         /// <summary>
-        /// Gets the graph spanning tree
+        /// Calculates the graph spanning forest
         /// </summary>
         /// <param name="inputXml">The graph description in the xml format</param>
         /// <param name="startVertexIndex">The start vertex index</param>
-        /// <returns>Returns the graph spanning tree in the xml format</returns>
+        /// <returns>Returns the graph spanning forest in the xml format</returns>
         /// <exception cref="ArgumentNullException">Throws if the inputXml is null</exception>
         /// <exception cref="ArgumentException">Throws if the inputXml format is invalid</exception>
-        /// <exception cref="InvalidOperationException">Throws if the graph is a null or is not a connected graph</exception>
-        public string GetSpanningTree(string inputXml, int startVertexIndex)
+        /// <exception cref="InvalidOperationException">Throws if the graph is a null graph</exception>
+        public string GetSpanningForest(string inputXml, int startVertexIndex)
         {
             IGraph graph = LoadGraphFromXml(inputXml);
-            IGraph spanningTree = graph.GetSpanningTree(startVertexIndex);
+            IGraph spanningTree = graph.GetSpanningForest(startVertexIndex);
             return this.SaveGraphToXml(spanningTree);
         }
 
