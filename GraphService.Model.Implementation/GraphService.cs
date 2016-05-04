@@ -173,7 +173,7 @@ namespace GraphService.Model
         /// <exception cref="ArgumentException">Throws if the inputXml format is invalid</exception>
         public bool IsNull(string inputXml)
         {
-            return LoadGraphFromXml(inputXml).IsNull;
+            return this.LoadGraphFromXml(inputXml).IsNull;
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace GraphService.Model
         /// <exception cref="ArgumentException">Throws if the inputXml format is invalid</exception>
         public bool IsSingleton(string inputXml)
         {
-            return LoadGraphFromXml(inputXml).IsSingleton;
+            return this.LoadGraphFromXml(inputXml).IsSingleton;
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace GraphService.Model
         /// <exception cref="ArgumentException">Throws if the inputXml format is invalid</exception>
         public bool IsEmpty(string inputXml)
         {
-            return LoadGraphFromXml(inputXml).IsEmpty();
+            return this.LoadGraphFromXml(inputXml).IsEmpty();
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace GraphService.Model
         /// <exception cref="ArgumentException">Throws if the inputXml format is invalid</exception>
         public bool IsComplete(string inputXml)
         {
-            return LoadGraphFromXml(inputXml).IsComplete();
+            return this.LoadGraphFromXml(inputXml).IsComplete();
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace GraphService.Model
         /// <exception cref="ArgumentOutOfRangeException">Throws if the start vertex index is less than zero or equals to or greater than the graph size</exception>
         public bool[] GetConnectivityMarkers(string inputXml, int startVertexIndex)
         {
-            return LoadGraphFromXml(inputXml).GetConnectivityMarkers(startVertexIndex);
+            return this.LoadGraphFromXml(inputXml).GetConnectivityMarkers(startVertexIndex);
         }
 
         /// <summary>
@@ -236,22 +236,23 @@ namespace GraphService.Model
         /// <exception cref="InvalidOperationException">Throws is the graph is a null graph</exception>
         public bool IsConnected(string inputXml)
         {
-            return LoadGraphFromXml(inputXml).IsConnected();
+            return this.LoadGraphFromXml(inputXml).IsConnected();
         }
 
         /// <summary>
         /// Gets the graph spanning tree
         /// </summary>
         /// <param name="inputXml">The graph description in the xml format</param>
+        /// <param name="startVertexIndex">The start vertex index</param>
         /// <returns>Returns the graph spanning tree in the xml format</returns>
         /// <exception cref="ArgumentNullException">Throws if the inputXml is null</exception>
         /// <exception cref="ArgumentException">Throws if the inputXml format is invalid</exception>
         /// <exception cref="InvalidOperationException">Throws if the graph is a null or is not a connected graph</exception>
-        public string GetSpanningTree(string inputXml)
+        public string GetSpanningTree(string inputXml, int startVertexIndex)
         {
             IGraph graph = LoadGraphFromXml(inputXml);
-            graph.ConvertToSpanningTree(0);
-            return SaveGraphToXml(graph);
+            IGraph spanningTree = graph.GetSpanningTree(startVertexIndex);
+            return this.SaveGraphToXml(spanningTree);
         }
 
         /// <summary>
@@ -266,7 +267,7 @@ namespace GraphService.Model
         /// </exception>
         public int[] GetVertexDeletingSequenceForConnectedGraph(string inputXml)
         {
-            return LoadGraphFromXml(inputXml).ConvertToSpanningTreeAndGetVertexDeletingSequenceForConnectedGraph(0);
+            return LoadGraphFromXml(inputXml).GetVertexDeletingSequenceForConnectedGraph(0);
         }
 
     }

@@ -68,15 +68,16 @@ namespace GraphModel
         bool IsConnected();
 
         /// <summary>
-        /// Converts the graph to its spanning tree
+        /// Calculates the graph spanning tree
         /// </summary>
         /// <param name="startVertexIndex">The start vertex index</param>
+        /// <returns>Returns the graph spanning tree</returns>
         /// <exception cref="InvalidOperationException">Throws if the graph is a null or is not a connected graph</exception>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the start vertex index is less than zero or equals to or greater than the graph size</exception>
-        void ConvertToSpanningTree(int startVertexIndex);
+        IGraph<TEdgeChangedEventArgs, TAllEdgesSettedEventArgs> GetSpanningTree(int startVertexIndex);
 
         /// <summary>
-        /// Converts the graph to its spanning tree and calculates a vertex deleting sequence for the connected graph
+        /// Calculates a vertex deleting sequence for the connected graph
         /// </summary>
         /// <param name="startVertexIndex">The start vertex index</param>
         /// <returns>Returns a vertex deleting sequence for the connected graph</returns>
@@ -86,7 +87,7 @@ namespace GraphModel
         /// <exception cref="ArgumentOutOfRangeException">
         /// Throws if the start vertex index is less than zero or equals to or greater than the graph size
         /// </exception>
-        int[] ConvertToSpanningTreeAndGetVertexDeletingSequenceForConnectedGraph(int startVertexIndex);
+        int[] GetVertexDeletingSequenceForConnectedGraph(int startVertexIndex);
 
         /// <summary>
         /// The Adjacency Matrix
