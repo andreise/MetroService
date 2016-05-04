@@ -147,13 +147,6 @@ namespace GraphModel
         /// <returns>Returns True if the graph is a complete, not a null and not a singleton graph, otherwise returns False</returns>
         public bool IsComplete() => this.Size >= 2 && this.AdjacencyMatrix.IsEmptyOrCompleteHelper(value => value);
 
-        private enum VertexConnectivityMarker
-        {
-            Unreached,
-            Reached,
-            Processed
-        }
-
         /// <summary>
         /// Calculates the graph connectivity markers
         /// </summary>
@@ -169,29 +162,33 @@ namespace GraphModel
             if (startVertexIndex < 0 || startVertexIndex >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(startVertexIndex), startVertexIndex, "The vertex index must be equal to or greater than zero and less than the graph size.");
 
-            var markers = new VertexConnectivityMarker[this.Size];
-            HashSet<int> reachedSet = new HashSet<int>();
+            bool[] markers = new bool[this.Size]; // Vertex markers (False: vertex is unreached; True: vertex is reached)
+            HashSet<int> reachedAndUprocessedSet = new HashSet<int>(); // Reached and unprocessed vertex set
 
-            markers[startVertexIndex] = VertexConnectivityMarker.Reached;
-            reachedSet.Add(startVertexIndex);
-            while (reachedSet.Count > 0)
+            Action<int> pushToReached = vertexIndex =>
             {
-                int currentVertexIndex = reachedSet.First();
-                markers[currentVertexIndex] = VertexConnectivityMarker.Processed;
-                reachedSet.Remove(currentVertexIndex);
-                for (int column = 0; column < this.Size; column++)
-                    if (this.AdjacencyMatrix[currentVertexIndex, column])
-                        if (markers[column] == VertexConnectivityMarker.Unreached)
-                        {
-                            markers[column] = VertexConnectivityMarker.Reached;
-                            reachedSet.Add(column);
-                        }
+                markers[vertexIndex] = true;
+                reachedAndUprocessedSet.Add(vertexIndex);
+            };
+
+            Func<int> popAnyFromReachedAndUprocessed = () =>
+            {
+                int vertexIndex = reachedAndUprocessedSet.First();
+                reachedAndUprocessedSet.Remove(vertexIndex);
+                return vertexIndex;
+            };
+
+            pushToReached(startVertexIndex);
+            while (reachedAndUprocessedSet.Count > 0)
+            {
+                int currentVertexIndex = popAnyFromReachedAndUprocessed();
+                for (int nextVertexIndex = 0; nextVertexIndex < this.Size; nextVertexIndex++)
+                    if (this.AdjacencyMatrix[currentVertexIndex, nextVertexIndex])
+                        if (!markers[nextVertexIndex])
+                            pushToReached(nextVertexIndex);
             }
 
-            bool[] boolMarkers = new bool[this.Size];
-            for (int i = 0; i < this.Size; i++)
-                boolMarkers[i] = markers[i] != VertexConnectivityMarker.Unreached;
-            return boolMarkers;
+            return markers;
         }
 
         /// <summary>
