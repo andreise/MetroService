@@ -69,14 +69,14 @@ namespace GraphService.Model
 
                 foreach (XmlElement edgeElem in edgeNodes)
                 {
-                    Func<string, string> getNoVertexElem = vertexName =>
+                    Func<string, string> getNoVertexElemMessage = vertexName =>
                         getInvalidInputFormatMessage(Invariant($"the edge element contains no {vertexName} child element"));
 
                     Func<string, XmlElement> getVertexElement = vertexName =>
                     {
                         var vertexElem = edgeElem[vertexName];
                         if ((object)vertexElem == null)
-                            throw new GraphXmlFormatException(getNoVertexElem(vertexName));
+                            throw new GraphXmlFormatException(getNoVertexElemMessage(vertexName));
                         return vertexElem;
                     };
 
@@ -251,8 +251,8 @@ namespace GraphService.Model
         public string GetSpanningForest(string inputXml, int startVertexIndex)
         {
             IGraph graph = LoadGraphFromXml(inputXml);
-            IGraph spanningTree = graph.GetSpanningForest(startVertexIndex);
-            return this.SaveGraphToXml(spanningTree);
+            IGraph spanningForest = graph.GetSpanningForest(startVertexIndex);
+            return this.SaveGraphToXml(spanningForest);
         }
 
         /// <summary>

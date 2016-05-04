@@ -213,12 +213,12 @@ namespace GraphModel
             if (startVertexIndex < 0 || startVertexIndex >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(startVertexIndex), startVertexIndex, "The vertex index must be equal to or greater than zero and less than the graph size.");
 
-            IGraph spanningTree = new Graph(this.Size);
+            Graph spanningForest = new Graph(this.Size);
 
             bool[] markers = new bool[this.Size];
+            Stack<Tuple<int, int>> stack = new Stack<Tuple<int, int>>(); // Item1: vertex index, Item2: from reached vertex index
             do // external cycle for spanning forest searching
             {
-                Stack<Tuple<int, int>> stack = new Stack<Tuple<int, int>>(); // Item1: vertex index, Item2: from reached vertex index
                 stack.Push(new Tuple<int, int>(startVertexIndex, -1));
                 do // internal cycle for spanning tree searching
                 {
@@ -230,7 +230,7 @@ namespace GraphModel
                     markers[currentVertexInfo.Item1] = true;
 
                     if (currentVertexInfo.Item2 >= 0)
-                        spanningTree.AdjacencyMatrix[currentVertexInfo.Item1, currentVertexInfo.Item2] = true;
+                        spanningForest.AdjacencyMatrix[currentVertexInfo.Item1, currentVertexInfo.Item2] = true;
 
                     for (int nextVertexIndex = 0; nextVertexIndex < this.Size; nextVertexIndex++)
                         if (this.AdjacencyMatrix[currentVertexInfo.Item1, nextVertexIndex])
@@ -242,7 +242,7 @@ namespace GraphModel
                 } while (stack.Count > 0);
             } while ((startVertexIndex = Array.FindIndex(markers, marker => !marker)) >= 0);
 
-            return spanningTree;
+            return spanningForest;
         }
 
         /// <summary>
