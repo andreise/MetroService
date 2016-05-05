@@ -104,9 +104,14 @@ namespace MetroModel
                 {
                     Func<string, string> getUnexpectedFormatMessage = description => Invariant($"The input file has an unexpected format: {description}.");
 
+                    const int maxEmptyLinesBeforeHeader = 100;
+                    int emptyLinesBeforeHeader = 0;
                     string header;
                     while ((object)(header = reader.ReadLine()) != null && string.IsNullOrWhiteSpace(header))
                     {
+                        emptyLinesBeforeHeader++;
+                        if (emptyLinesBeforeHeader > maxEmptyLinesBeforeHeader)
+                            throw new UnexpectedFileFormatException(getUnexpectedFormatMessage("the file header is empty"));
                     }
                     if ((object)header == null)
                         throw new UnexpectedFileFormatException(getUnexpectedFormatMessage("the file is empty"));

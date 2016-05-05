@@ -17,7 +17,7 @@ namespace GraphService.Model
         /// </summary>
         static GraphServiceProvider()
         {
-            // Static fields must be initialized in static constructor, not in place in declaration,
+            // Static fields must be initialized in a static constructor, not in a place of the declaration,
             // for the guaranted initialization in a multithread work in services
 
             defaultInstanceContainer = new Lazy<IGraphService>(() => new GraphService());
