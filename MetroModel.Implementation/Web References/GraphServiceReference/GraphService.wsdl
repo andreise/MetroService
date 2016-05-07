@@ -2,17 +2,17 @@
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://andreysergeev.org/graphservice" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://andreysergeev.org/graphservice" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://andreysergeev.org/graphservice">
-      <s:element name="GetVertexDeletingSequenceForConnectedGraph">
+      <s:element name="GetConnectedGraphVertexDeletingSequence">
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="inputXml" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="GetVertexDeletingSequenceForConnectedGraphResponse">
+      <s:element name="GetConnectedGraphVertexDeletingSequenceResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="GetVertexDeletingSequenceForConnectedGraphResult" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="GetConnectedGraphVertexDeletingSequenceResult" type="s:boolean" />
             <s:element minOccurs="0" maxOccurs="1" name="result" type="tns:ArrayOfInt" />
             <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string" />
           </s:sequence>
@@ -25,22 +25,22 @@
       </s:complexType>
     </s:schema>
   </wsdl:types>
-  <wsdl:message name="GetVertexDeletingSequenceForConnectedGraphSoapIn">
-    <wsdl:part name="parameters" element="tns:GetVertexDeletingSequenceForConnectedGraph" />
+  <wsdl:message name="GetConnectedGraphVertexDeletingSequenceSoapIn">
+    <wsdl:part name="parameters" element="tns:GetConnectedGraphVertexDeletingSequence" />
   </wsdl:message>
-  <wsdl:message name="GetVertexDeletingSequenceForConnectedGraphSoapOut">
-    <wsdl:part name="parameters" element="tns:GetVertexDeletingSequenceForConnectedGraphResponse" />
+  <wsdl:message name="GetConnectedGraphVertexDeletingSequenceSoapOut">
+    <wsdl:part name="parameters" element="tns:GetConnectedGraphVertexDeletingSequenceResponse" />
   </wsdl:message>
   <wsdl:portType name="GraphServiceSoap">
-    <wsdl:operation name="GetVertexDeletingSequenceForConnectedGraph">
-      <wsdl:input message="tns:GetVertexDeletingSequenceForConnectedGraphSoapIn" />
-      <wsdl:output message="tns:GetVertexDeletingSequenceForConnectedGraphSoapOut" />
+    <wsdl:operation name="GetConnectedGraphVertexDeletingSequence">
+      <wsdl:input message="tns:GetConnectedGraphVertexDeletingSequenceSoapIn" />
+      <wsdl:output message="tns:GetConnectedGraphVertexDeletingSequenceSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="GraphServiceSoap" type="tns:GraphServiceSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="GetVertexDeletingSequenceForConnectedGraph">
-      <soap:operation soapAction="http://andreysergeev.org/graphservice/GetVertexDeletingSequenceForConnectedGraph" style="document" />
+    <wsdl:operation name="GetConnectedGraphVertexDeletingSequence">
+      <soap:operation soapAction="http://andreysergeev.org/graphservice/GetConnectedGraphVertexDeletingSequence" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -51,8 +51,8 @@
   </wsdl:binding>
   <wsdl:binding name="GraphServiceSoap12" type="tns:GraphServiceSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="GetVertexDeletingSequenceForConnectedGraph">
-      <soap12:operation soapAction="http://andreysergeev.org/graphservice/GetVertexDeletingSequenceForConnectedGraph" style="document" />
+    <wsdl:operation name="GetConnectedGraphVertexDeletingSequence">
+      <soap12:operation soapAction="http://andreysergeev.org/graphservice/GetConnectedGraphVertexDeletingSequence" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

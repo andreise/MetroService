@@ -263,11 +263,11 @@ namespace GraphService.Model
         /// <exception cref="ArgumentNullException">Throws if the inputXml is null</exception>
         /// <exception cref="ArgumentException">Throws if the inputXml format is invalid</exception>
         /// <exception cref="InvalidOperationException">
-        /// Throws if the graph is a null or is not a connected graph, or the graph is in an unexpected invalid state
+        /// Throws if the graph is a null or is not a connected graph, or the graph is in a some unexpected state
         /// </exception>
-        public int[] GetVertexDeletingSequenceForConnectedGraph(string inputXml)
+        public int[] GetConnectedGraphVertexDeletingSequence(string inputXml)
         {
-            return LoadGraphFromXml(inputXml).GetVertexDeletingSequenceForConnectedGraph(0);
+            return LoadGraphFromXml(inputXml).GetConnectedGraphVertexDeletingSequence(0);
         }
 
     }

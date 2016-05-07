@@ -251,12 +251,12 @@ namespace GraphModel
         /// <param name="startVertexIndex">The start vertex index</param>
         /// <returns>Returns a vertex deleting sequence for the connected graph</returns>
         /// <exception cref="InvalidOperationException">
-        /// Throws if the graph is a null or is not a connected graph, or the graph is in an unexpected invalid state
+        /// Throws if the graph is a null or is not a connected graph, or the graph is in a some unexpected state
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// Throws if the start vertex index is less than zero or equals to or greater than the graph size
         /// </exception>
-        public virtual int[] GetVertexDeletingSequenceForConnectedGraph(int startVertexIndex)
+        public virtual int[] GetConnectedGraphVertexDeletingSequence(int startVertexIndex)
         {
             if (this.Size == 0)
                 throw new InvalidOperationException("The graph is a null graph.");
@@ -269,46 +269,55 @@ namespace GraphModel
 
             IGraph spanningTree = this.GetSpanningForest(startVertexIndex);
 
-            HashSet<int> processedVertexSet = new HashSet<int>();
-            int[] processedVertexSequence = new int[spanningTree.Size];
+            bool[] processedVertexMarkers = new bool[spanningTree.Size];
+            List<int> processedVertexSequence = new List<int>(spanningTree.Size);
 
-            Func<int> getFirstExternalVertexIndex = () =>
+            Action<int> putIntoProcessed = vertexIndex =>
             {
-                for (int i = 0; i < spanningTree.Size; i++)
-                    if (!processedVertexSet.Contains(i))
-                        if (spanningTree.Vertices[i].Degree == 1)
-                            return i;
+                processedVertexMarkers[vertexIndex] = true;
+                processedVertexSequence.Add(vertexIndex);
+            };
+
+            Func<int> getFirstLeafIndex = () =>
+            {
+                for (int vertexIndex = 0; vertexIndex < spanningTree.Size; vertexIndex++)
+                    if (!processedVertexMarkers[vertexIndex])
+                        if (spanningTree.Vertices[vertexIndex].Degree == 1)
+                            return vertexIndex;
                 return -1;
             };
 
-            // Process all vertexes excluding a last vertex
-            // Do nothing for a singleton graph
-            while (processedVertexSet.Count < spanningTree.Size - 1)
+            Func<int, int> getLeafAdjacentIndex = leafIndex =>
             {
-                int currentExternalVertexIndex = getFirstExternalVertexIndex();
-                if (currentExternalVertexIndex < 0)
-                    throw new InvalidOperationException("Unexpected Exception: External Vertex Not Found.");
+                for (int otherVertexIndex = 0; otherVertexIndex < spanningTree.Size; otherVertexIndex++)
+                    if (spanningTree.AdjacencyMatrix[leafIndex, otherVertexIndex])
+                        return otherVertexIndex;
+                return -1;
+            };
 
-                for (int column = 0; column < spanningTree.Size; column++)
-                    if (spanningTree.AdjacencyMatrix[currentExternalVertexIndex, column])
-                    {
-                        spanningTree.AdjacencyMatrix[currentExternalVertexIndex, column] = false;
-                        processedVertexSet.Add(currentExternalVertexIndex);
-                        processedVertexSequence[processedVertexSet.Count - 1] = currentExternalVertexIndex;
-                        break;
-                    }
+            Func<int> getFirst = () => Array.FindIndex(processedVertexMarkers, marker => !marker);
+
+            while (processedVertexSequence.Count < spanningTree.Size - 1)
+            {
+                int leafIndex = getFirstLeafIndex();
+                if (leafIndex < 0)
+                    throw new InvalidOperationException("Unexpected Exception: No leaf vertex is found.");
+
+                int leafAdjacentIndex = getLeafAdjacentIndex(leafIndex);
+                if (leafAdjacentIndex < 0)
+                    throw new InvalidOperationException("Unexpected Exception: No leaf adjacent vertex is found.");
+
+                spanningTree.AdjacencyMatrix[leafIndex, leafAdjacentIndex] = false;
+                putIntoProcessed(leafIndex);
             }
 
-            // Process the last unprocessed vertex (or the first vertex for a singleton graph)
-            for (int i = 0; i < spanningTree.Size; i++)
-                if (!processedVertexSet.Contains(i))
-                {
-                    processedVertexSequence[processedVertexSequence.Length - 1] = i;
-                    break;
-                }
+            if (spanningTree.Size > 0)
+            {
+                int lastVertexIndex = getFirst();
+                putIntoProcessed(lastVertexIndex);
+            }
 
-
-            return processedVertexSequence;
+            return processedVertexSequence.ToArray();
         }
 
         /// <summary>
@@ -331,8 +340,8 @@ namespace GraphModel
             for (int vertexIndex = 0; vertexIndex < this.Size; vertexIndex++)
             {
                 this.Vertices[vertexIndex].Degree = 0;
-                for (int column = 0; column < this.Size; column++)
-                    if (this.AdjacencyMatrix[vertexIndex, column])
+                for (int otherVertexIndex = 0; otherVertexIndex < this.Size; otherVertexIndex++)
+                    if (this.AdjacencyMatrix[vertexIndex, otherVertexIndex])
                         this.Vertices[vertexIndex].Degree++;
             }
         }

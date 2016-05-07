@@ -33,11 +33,11 @@ namespace GraphService
         /// <param name="errorMessage">An error message if execution failed, otherwise the null value</param>
         /// <returns>Returns True if executed successfully, otherwise returns False</returns>
         [WebMethod]
-        public bool GetVertexDeletingSequenceForConnectedGraph(string inputXml, out int[] result, out string errorMessage)
+        public bool GetConnectedGraphVertexDeletingSequence(string inputXml, out int[] result, out string errorMessage)
         {
             try
             {
-                result = GraphServiceProvider.Default.GetVertexDeletingSequenceForConnectedGraph(inputXml);
+                result = GraphServiceProvider.Default.GetConnectedGraphVertexDeletingSequence(inputXml);
                 errorMessage = null;
                 return true;
             }

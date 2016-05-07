@@ -82,12 +82,12 @@ namespace GraphModel
         /// <param name="startVertexIndex">The start vertex index</param>
         /// <returns>Returns a vertex deleting sequence for the connected graph</returns>
         /// <exception cref="InvalidOperationException">
-        /// Throws if the graph is a null or is not a connected graph, or the graph is in an unexpected invalid state
+        /// Throws if the graph is a null or is not a connected graph, or the graph is in a some unexpected state
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// Throws if the start vertex index is less than zero or equals to or greater than the graph size
         /// </exception>
-        int[] GetVertexDeletingSequenceForConnectedGraph(int startVertexIndex);
+        int[] GetConnectedGraphVertexDeletingSequence(int startVertexIndex);
 
         /// <summary>
         /// The Adjacency Matrix

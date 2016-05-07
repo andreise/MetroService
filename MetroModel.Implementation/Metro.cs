@@ -152,9 +152,9 @@ namespace MetroModel
 
                     int stationCount = ParseInt32Parameter(nameof(stationCount), headerItems[0]);
                     if (stationCount < 1)
-                        throw new UnexpectedFileFormatException(getUnexpectedFormatMessage("the metro must contains an least one station"));
+                        throw new UnexpectedFileFormatException(getUnexpectedFormatMessage("the metro must contains at least one station"));
                     //if (stationCount < 2)
-                    //    throw new UnexpectedFileFormatException(getUnexpectedFormatMessage("the metro must contains an least two stations"));
+                    //    throw new UnexpectedFileFormatException(getUnexpectedFormatMessage("the metro must contains at least two stations"));
                     if (stationCount > MaxStations)
                         throw new UnexpectedFileFormatException(getUnexpectedFormatMessage(Invariant($"a metro should not contains more than {MaxStations} stations")));
 
@@ -251,7 +251,7 @@ namespace MetroModel
                 int[] sequence;
                 string errorMessage;
                 string inputXml = LoadInputTextToXml(this.InputFileName);
-                if (!graphService.GetVertexDeletingSequenceForConnectedGraph(inputXml, out sequence, out errorMessage))
+                if (!graphService.GetConnectedGraphVertexDeletingSequence(inputXml, out sequence, out errorMessage))
                     throw new GraphServiceErrorWrapperException(errorMessage);
                 SaveSequenceToFile(this.OutputFileName, sequence);
             }

@@ -65,8 +65,8 @@ namespace GraphModel
         public void RecalcDegree()
         {
             this.Degree = 0;
-            for (int column = 0; column < this.Owner.AdjacencyMatrix.Size; column++)
-                if (this.Owner.AdjacencyMatrix[this.Index, column])
+            for (int otherVertexIndex = 0; otherVertexIndex < this.Owner.AdjacencyMatrix.Size; otherVertexIndex++)
+                if (this.Owner.AdjacencyMatrix[this.Index, otherVertexIndex])
                     this.Degree++;
         }
     }
