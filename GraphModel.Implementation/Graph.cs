@@ -160,35 +160,35 @@ namespace GraphModel
             if (startVertexIndex < 0 || startVertexIndex >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(startVertexIndex), startVertexIndex, "The vertex index must be equal to or greater than zero and less than the graph size.");
 
-            bool[] markers = new bool[this.Size]; // Vertex markers (False: vertex is unreached; True: vertex is reached)
-            HashSet<int> reachedAndUprocessedSet = new HashSet<int>(); // Reached and unprocessed vertex set
+            bool[] processedVertexMarkers = new bool[this.Size];
+            HashSet<int> reachedVertexSet = new HashSet<int>();
 
-            Func<int, bool> isReached = vertexIndex => markers[vertexIndex];
+            Func<int, bool> isProcessed = vertexIndex => processedVertexMarkers[vertexIndex];
 
-            Action<int> pushToReached = vertexIndex =>
+            Action<int> processAndAddToReached = vertexIndex =>
             {
-                markers[vertexIndex] = true;
-                reachedAndUprocessedSet.Add(vertexIndex);
+                processedVertexMarkers[vertexIndex] = true;
+                reachedVertexSet.Add(vertexIndex);
             };
 
-            Func<int> popAnyFromReachedAndUprocessed = () =>
+            Func<int> removeAnyFromReached = () =>
             {
-                int vertexIndex = reachedAndUprocessedSet.First();
-                reachedAndUprocessedSet.Remove(vertexIndex);
+                int vertexIndex = reachedVertexSet.First();
+                reachedVertexSet.Remove(vertexIndex);
                 return vertexIndex;
             };
 
-            pushToReached(startVertexIndex);
-            while (reachedAndUprocessedSet.Count > 0)
+            processAndAddToReached(startVertexIndex);
+            while (reachedVertexSet.Count > 0)
             {
-                int currentVertexIndex = popAnyFromReachedAndUprocessed();
-                for (int nextVertexIndex = 0; nextVertexIndex < this.Size; nextVertexIndex++)
-                    if (this.AdjacencyMatrix[currentVertexIndex, nextVertexIndex])
-                        if (!isReached(nextVertexIndex))
-                            pushToReached(nextVertexIndex);
+                int currentVertexIndex = removeAnyFromReached();
+                for (int otherVertexIndex = 0; otherVertexIndex < this.Size; otherVertexIndex++)
+                    if (this.AdjacencyMatrix[currentVertexIndex, otherVertexIndex])
+                        if (!isProcessed(otherVertexIndex))
+                            processAndAddToReached(otherVertexIndex);
             }
 
-            return markers;
+            return processedVertexMarkers;
         }
 
         /// <summary>
@@ -215,64 +215,54 @@ namespace GraphModel
 
             Graph spanningForest = new Graph(this.Size);
 
-            bool[] markers = new bool[this.Size];
-            Stack<Tuple<int, int>> stack = new Stack<Tuple<int, int>>(); // Item1: vertex index, Item2: from reached vertex index
+            bool[] processedVertexMarkers = new bool[this.Size];
+            Stack<Tuple<int, int>> reachedVertexStack = new Stack<Tuple<int, int>>(); // Item1: vertex index, Item2: from reached vertex index
+
             do // external cycle for spanning forest searching
             {
-                stack.Push(new Tuple<int, int>(startVertexIndex, -1));
+
+                reachedVertexStack.Push(new Tuple<int, int>(startVertexIndex, -1));
+
                 do // internal cycle for spanning tree searching
                 {
-                    Tuple<int, int> currentVertexInfo = stack.Pop();
+                    Tuple<int, int> currentVertexInfo = reachedVertexStack.Pop();
 
-                    if (markers[currentVertexInfo.Item1])
+                    if (processedVertexMarkers[currentVertexInfo.Item1])
                         continue;
 
-                    markers[currentVertexInfo.Item1] = true;
+                    processedVertexMarkers[currentVertexInfo.Item1] = true;
 
                     if (currentVertexInfo.Item2 >= 0)
                         spanningForest.AdjacencyMatrix[currentVertexInfo.Item1, currentVertexInfo.Item2] = true;
 
-                    for (int nextVertexIndex = 0; nextVertexIndex < this.Size; nextVertexIndex++)
-                        if (this.AdjacencyMatrix[currentVertexInfo.Item1, nextVertexIndex])
+                    for (int otherVertexIndex = 0; otherVertexIndex < this.Size; otherVertexIndex++)
+                        if (this.AdjacencyMatrix[currentVertexInfo.Item1, otherVertexIndex])
                         {
-                            if (markers[nextVertexIndex])
+                            if (processedVertexMarkers[otherVertexIndex])
                                 continue;
-                            stack.Push(new Tuple<int, int>(nextVertexIndex, currentVertexInfo.Item1));
+                            reachedVertexStack.Push(new Tuple<int, int>(otherVertexIndex, currentVertexInfo.Item1));
                         }
-                } while (stack.Count > 0);
-            } while ((startVertexIndex = Array.FindIndex(markers, marker => !marker)) >= 0);
+                } while (reachedVertexStack.Count > 0);
+
+            } while ((startVertexIndex = Array.FindIndex(processedVertexMarkers, marker => !marker)) >= 0);
 
             return spanningForest;
         }
 
         /// <summary>
-        /// Calculates a vertex deleting sequence for the connected graph
+        /// Calculates a vertex deleting sequence for the spanning tree
         /// </summary>
-        /// <param name="startVertexIndex">The start vertex index</param>
-        /// <returns>Returns a vertex deleting sequence for the connected graph</returns>
+        /// <param name="spanningTree">The spanning tree</param>
+        /// <returns>Returns a vertex deleting sequence for the spanning tree</returns>
         /// <exception cref="InvalidOperationException">
-        /// Throws if the graph is a null or is not a connected graph, or the graph is in a some unexpected state
+        /// Throws if the graph is in a some unexpected state; for example, the graph is not a spanning tree
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Throws if the start vertex index is less than zero or equals to or greater than the graph size
-        /// </exception>
-        public virtual int[] GetConnectedGraphVertexDeletingSequence(int startVertexIndex)
+        private static int[] GetSpanningTreeVertexDeletingSequenceHelper(IGraph spanningTree)
         {
-            if (this.Size == 0)
-                throw new InvalidOperationException("The graph is a null graph.");
-
-            if (startVertexIndex < 0 || startVertexIndex >= this.Size)
-                throw new ArgumentOutOfRangeException(nameof(startVertexIndex), startVertexIndex, "The vertex index must be equal to or greater than zero and less than the graph size.");
-
-            if (!this.IsConnected())
-                throw new InvalidOperationException("The graph is not a connected graph.");
-
-            IGraph spanningTree = this.GetSpanningForest(startVertexIndex);
-
             bool[] processedVertexMarkers = new bool[spanningTree.Size];
             List<int> processedVertexSequence = new List<int>(spanningTree.Size);
 
-            Action<int> putIntoProcessed = vertexIndex =>
+            Action<int> addToProcessed = vertexIndex =>
             {
                 processedVertexMarkers[vertexIndex] = true;
                 processedVertexSequence.Add(vertexIndex);
@@ -308,16 +298,42 @@ namespace GraphModel
                     throw new InvalidOperationException("Unexpected Exception: No leaf adjacent vertex is found.");
 
                 spanningTree.AdjacencyMatrix[leafIndex, leafAdjacentIndex] = false;
-                putIntoProcessed(leafIndex);
+                addToProcessed(leafIndex);
             }
 
             if (spanningTree.Size > 0)
             {
                 int lastVertexIndex = getFirst();
-                putIntoProcessed(lastVertexIndex);
+                addToProcessed(lastVertexIndex);
             }
 
             return processedVertexSequence.ToArray();
+        }
+
+        /// <summary>
+        /// Calculates a vertex deleting sequence for the connected graph
+        /// </summary>
+        /// <param name="startVertexIndex">The start vertex index</param>
+        /// <returns>Returns a vertex deleting sequence for the connected graph</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Throws if the graph is a null or is not a connected graph, or the graph is in a some unexpected state
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Throws if the start vertex index is less than zero or equals to or greater than the graph size
+        /// </exception>
+        public virtual int[] GetConnectedGraphVertexDeletingSequence(int startVertexIndex)
+        {
+            if (this.Size == 0)
+                throw new InvalidOperationException("The graph is a null graph.");
+
+            if (startVertexIndex < 0 || startVertexIndex >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(startVertexIndex), startVertexIndex, "The vertex index must be equal to or greater than zero and less than the graph size.");
+
+            if (!this.IsConnected())
+                throw new InvalidOperationException("The graph is not a connected graph.");
+
+            IGraph spanningTree = this.GetSpanningForest(startVertexIndex);
+            return GetSpanningTreeVertexDeletingSequenceHelper(spanningTree);
         }
 
         /// <summary>
