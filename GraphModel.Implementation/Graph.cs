@@ -236,12 +236,12 @@ namespace GraphModel
                         spanningForest.AdjacencyMatrix[currentVertexInfo.Item1, currentVertexInfo.Item2] = true;
 
                     for (int otherVertexIndex = 0; otherVertexIndex < this.Size; otherVertexIndex++)
+                    {
+                        if (processedVertexMarkers[otherVertexIndex])
+                            continue;
                         if (this.AdjacencyMatrix[currentVertexInfo.Item1, otherVertexIndex])
-                        {
-                            if (processedVertexMarkers[otherVertexIndex])
-                                continue;
                             reachedVertexStack.Push(new Tuple<int, int>(otherVertexIndex, currentVertexInfo.Item1));
-                        }
+                    }
                 } while (reachedVertexStack.Count > 0);
 
             } while ((startVertexIndex = Array.FindIndex(processedVertexMarkers, marker => !marker)) >= 0);
