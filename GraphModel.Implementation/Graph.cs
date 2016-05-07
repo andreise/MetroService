@@ -268,7 +268,7 @@ namespace GraphModel
                 processedVertexSequence.Add(vertexIndex);
             };
 
-            Func<int> getFirstLeafIndex = () =>
+            Func<int> getAnyLeafIndex = () =>
             {
                 for (int vertexIndex = 0; vertexIndex < spanningTree.Size; vertexIndex++)
                     if (!processedVertexMarkers[vertexIndex])
@@ -285,11 +285,11 @@ namespace GraphModel
                 return -1;
             };
 
-            Func<int> getFirst = () => Array.FindIndex(processedVertexMarkers, marker => !marker);
+            Func<int> getAnyVertexIndex = () => Array.FindIndex(processedVertexMarkers, marker => !marker);
 
             while (processedVertexSequence.Count < spanningTree.Size - 1)
             {
-                int leafIndex = getFirstLeafIndex();
+                int leafIndex = getAnyLeafIndex();
                 if (leafIndex < 0)
                     throw new InvalidOperationException("Unexpected Exception: No leaf vertex is found.");
 
@@ -303,7 +303,7 @@ namespace GraphModel
 
             if (spanningTree.Size > 0)
             {
-                int lastVertexIndex = getFirst();
+                int lastVertexIndex = getAnyVertexIndex();
                 addToProcessed(lastVertexIndex);
             }
 
@@ -358,7 +358,15 @@ namespace GraphModel
                 this.Vertices[vertexIndex].Degree = 0;
                 for (int otherVertexIndex = 0; otherVertexIndex < this.Size; otherVertexIndex++)
                     if (this.AdjacencyMatrix[vertexIndex, otherVertexIndex])
-                        this.Vertices[vertexIndex].Degree++;
+                        if (vertexIndex == otherVertexIndex)
+                        {
+                            if (this.IsLoopGraph)
+                                this.Vertices[vertexIndex].Degree += 2;
+                        }
+                        else
+                        {
+                            this.Vertices[vertexIndex].Degree++;
+                        }
             }
         }
 

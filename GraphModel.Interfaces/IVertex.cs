@@ -2,7 +2,7 @@
 {
 
     /// <summary>
-    /// Simple Graph Vertex
+    /// Simple Graph Vertex (Optionally Directed or Loop-graph)
     /// </summary>
     /// <remarks>
     /// A simple graph is an unweighted, undirected graph containing no graph loops or multiple edges

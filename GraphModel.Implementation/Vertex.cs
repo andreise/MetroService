@@ -5,7 +5,7 @@ namespace GraphModel
 {
 
     /// <summary>
-    /// Simple Graph Vertex
+    /// Simple Graph Vertex (Optionally Directed or Loop-graph)
     /// </summary>
     /// <remarks>
     /// A simple graph is an unweighted, undirected graph containing no graph loops or multiple edges
@@ -43,12 +43,28 @@ namespace GraphModel
             this.Owner.EdgeChanged += (sender, e) =>
             {
                 if (e.FirstVertexIndex == this.Index || e.SecondVertexIndex == this.Index)
-                    if (e.NewEdgeValue)
-                        this.Degree++;
+                {
+                    if (e.FirstVertexIndex == e.SecondVertexIndex)
+                    {
+                        if (this.Owner.IsLoopGraph)
+                        {
+                            if (e.NewEdgeValue)
+                                this.Degree += 2;
+                            else
+                                this.Degree -= 2;
+                        }
+                    }
                     else
-                        this.Degree--;
+                    {
+                        if (e.NewEdgeValue)
+                            this.Degree++;
+                        else
+                            this.Degree--;
+                    }
+                }
             };
-            this.Owner.AllEdgesSetted += (sender, e) => this.Degree = e.NewEdgeValue ? this.Owner.Size - 1 : 0;
+
+            this.Owner.AllEdgesSetted += (sender, e) => this.Degree = e.NewEdgeValue ? (this.Owner.IsLoopGraph ? this.Owner.Size + 1 : this.Owner.Size - 1) : 0;
         }
 
         /// <summary>
@@ -67,7 +83,15 @@ namespace GraphModel
             this.Degree = 0;
             for (int otherVertexIndex = 0; otherVertexIndex < this.Owner.AdjacencyMatrix.Size; otherVertexIndex++)
                 if (this.Owner.AdjacencyMatrix[this.Index, otherVertexIndex])
-                    this.Degree++;
+                    if (this.Index == otherVertexIndex)
+                    {
+                        if (this.Owner.IsLoopGraph)
+                            this.Degree += 2;
+                    }
+                    else
+                    {
+                        this.Degree++;
+                    }
         }
     }
 
