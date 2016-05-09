@@ -259,13 +259,14 @@ namespace GraphModel
         /// </exception>
         private static int[] GetSpanningTreeVertexDeletingSequenceHelper(IGraph spanningTree)
         {
+            int processedVertexCount = 0;
             bool[] processedVertexMarkers = new bool[spanningTree.Size];
-            List<int> processedVertexSequence = new List<int>(spanningTree.Size);
+            int[] processedVertexSequence = new int[spanningTree.Size];
 
             Action<int> addToProcessed = vertexIndex =>
             {
                 processedVertexMarkers[vertexIndex] = true;
-                processedVertexSequence.Add(vertexIndex);
+                processedVertexSequence[processedVertexCount++] = vertexIndex;
             };
 
             Func<int> getAnyLeafIndex = () =>
@@ -287,7 +288,7 @@ namespace GraphModel
 
             Func<int> getAnyVertexIndex = () => Array.FindIndex(processedVertexMarkers, marker => !marker);
 
-            while (processedVertexSequence.Count < spanningTree.Size - 1)
+            while (processedVertexCount < spanningTree.Size - 1)
             {
                 int leafIndex = getAnyLeafIndex();
                 if (leafIndex < 0)
@@ -307,7 +308,7 @@ namespace GraphModel
                 addToProcessed(lastVertexIndex);
             }
 
-            return processedVertexSequence.ToArray();
+            return processedVertexSequence;
         }
 
         /// <summary>
