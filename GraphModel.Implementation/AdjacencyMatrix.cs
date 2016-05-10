@@ -139,11 +139,9 @@ namespace GraphModel
             if ((object)isExpectedEdgeValue == null)
                 throw new ArgumentNullException(nameof(isExpectedEdgeValue));
 
-            this.ForEachEdgeHelper(
+            return this.ForEachEdgeHelper(
                 (i, j) => isExpectedEdgeValue(this.Edges[i][j])
             );
-
-            return true;
         }
 
         private void CheckIndex(string indexName, int index)
