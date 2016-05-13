@@ -245,7 +245,7 @@ namespace MetroModel
                 e is IOException
             )
             {
-                throw new FileSavingException(Invariant($"The exception was thrown during saving the file '{destPath}'."), e.InnerException);
+                throw new FileSavingException(Invariant($"The exception was thrown during saving the file '{destPath}'."), e);
             }
         }
 
