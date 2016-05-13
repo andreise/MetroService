@@ -277,7 +277,6 @@ namespace MetroModel
 
                 default:
                     throw new InvalidOperationException(Invariant($"The '{this.TaskCode}' task support not implemented."));
-
             }
         }
 

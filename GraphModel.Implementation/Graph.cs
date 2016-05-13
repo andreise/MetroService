@@ -114,18 +114,12 @@ namespace GraphModel
         /// <summary>
         /// Checks the graph is a null graph
         /// </summary>
-        public bool IsNull
-        {
-            get { return this.Size == 0; }
-        }
+        public bool IsNull => this.Size == 0;
 
         /// <summary>
         /// Checks the graph is a singleton graph
         /// </summary>
-        public bool IsSingleton
-        {
-            get { return this.Size == 1; }
-        }
+        public bool IsSingleton => this.Size == 1;
 
         /// <summary>
         /// Checks the graph is an empty, a null or a singleton graph
@@ -332,13 +326,13 @@ namespace GraphModel
         }
 
         /// <summary>
-        /// Does the empty graph if graph is not a null and is not a singleton graph,
+        /// Does the empty graph if the graph is not a null and is not a singleton graph,
         /// otherwise does nothing
         /// </summary>
         public void DoEmpty() => this.AdjacencyMatrix.FillEdgesHelper(false);
 
         /// <summary>
-        /// Does the complete graph if graph is not a null and is not a singleton graph,
+        /// Does the complete graph if the graph is not a null and is not a singleton graph,
         /// otherwise does nothing
         /// </summary>
         public void DoComplete() => this.AdjacencyMatrix.FillEdgesHelper(true);

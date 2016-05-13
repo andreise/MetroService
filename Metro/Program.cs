@@ -36,13 +36,7 @@ namespace Metro
             return string.IsNullOrEmpty(exeName) ? "Metro.exe" : exeName;
         }
 
-        private static void OutputAppTitle()
-        {
-            OutputLines(
-                "Metro Application / Graph Service Client",
-                ""
-            );
-        }
+        private static void OutputAppTitle() => OutputLines("Metro Application / Graph Service Client", "");
 
         private static void OutputHelp()
         {

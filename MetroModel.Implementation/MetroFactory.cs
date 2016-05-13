@@ -15,9 +15,7 @@ namespace MetroModel
         /// <returns>Returns a new Metro instance</returns>
         /// <exception cref="ArgumentNullException">Throws if the args is null</exception>
         /// <exception cref="ArgumentException">Throws if any arg value is undefined or unknown</exception>
-        public static IMetro CreateMetro(string[] args)
-        {
-            return Metro.Create(args);
-        }
+        public static IMetro CreateMetro(string[] args) => Metro.Create(args);
+
     }
 }

@@ -26,31 +26,22 @@ namespace GraphService.Model
         /// <summary>
         /// The default graph service instance
         /// </summary>
-        public static IGraphService Default
-        {
-            get { return defaultInstanceContainer.Value; }
-        }
+        public static IGraphService Default => defaultInstanceContainer.Value;
 
         /// <summary>
         /// Gets a graph service
         /// </summary>
         /// <returns>A graph service instance</returns>
         /// <remarks>
-        /// Th method behaviour is implementation depended:
+        /// The method behaviour is implementation depended:
         /// the method returns the default instance, or a some already existing instance (for ex., from a some pool), or a new instance
         /// </remarks>
-        public static IGraphService GetGraphService()
-        {
-            return Default;
-        }
+        public static IGraphService GetGraphService() => Default;
 
         /// <summary>
         /// Creates a new graph service instance
         /// </summary>
         /// <returns>Returns a new graph service instance</returns>
-        public static IGraphService GetNewGraphService()
-        {
-            return new GraphService();
-        }
+        public static IGraphService GetNewGraphService() => new GraphService();
     }
 }

@@ -100,13 +100,13 @@ namespace GraphModel
         IReadOnlyList<IVertex> Vertices { get; }
 
         /// <summary>
-        /// Does the empty graph if graph is not a null and is not a singleton graph,
+        /// Does the empty graph if the graph is not a null and is not a singleton graph,
         /// otherwise does nothing
         /// </summary>
         void DoEmpty();
 
         /// <summary>
-        /// Does the complete graph if graph is not a null and is not a singleton graph,
+        /// Does the complete graph if the graph is not a null and is not a singleton graph,
         /// otherwise does nothing
         /// </summary>
         void DoComplete();
