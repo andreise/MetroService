@@ -219,8 +219,8 @@ namespace MetroModel
             }
             catch (Exception e) when (
                 e is ArgumentException ||
-                e is UnauthorizedAccessException ||
                 e is NotSupportedException ||
+                e is UnauthorizedAccessException ||
                 e is IOException
             )
             {
@@ -238,7 +238,12 @@ namespace MetroModel
                         writer.WriteLine((sequence[i] + 1).ToString(NumberFormatInfo.InvariantInfo));
                 }
             }
-            catch (Exception e)
+            catch (Exception e) when (
+                e is ArgumentException ||
+                e is NotSupportedException ||
+                e is UnauthorizedAccessException ||
+                e is IOException
+            )
             {
                 throw new FileSavingException(Invariant($"The exception was thrown during saving the file '{destPath}'."), e.InnerException);
             }
