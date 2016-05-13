@@ -43,7 +43,6 @@ namespace Metro
             string exeName = GetExecutableName();
 
             OutputLines(
-                "Metro Application / Graph Service Client",
                 "The Application loads a metro scheme and gets a metro stations closing sequence to stay metro scheme as a connected graph until last station reached.",
                 "",
                 "Usage Syntax:",

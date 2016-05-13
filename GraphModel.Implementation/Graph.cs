@@ -171,9 +171,12 @@ namespace GraphModel
             {
                 int currentVertexIndex = removeAnyFromReached();
                 for (int otherVertexIndex = 0; otherVertexIndex < this.Size; otherVertexIndex++)
+                {
+                    if (isProcessed(otherVertexIndex))
+                        continue;
                     if (this.AdjacencyMatrix[currentVertexIndex, otherVertexIndex])
-                        if (!isProcessed(otherVertexIndex))
-                            processAndAddToReached(otherVertexIndex);
+                        processAndAddToReached(otherVertexIndex);
+                }
             }
 
             return processedVertexMarkers;
@@ -260,9 +263,12 @@ namespace GraphModel
             Func<int> getAnyLeafIndex = () =>
             {
                 for (int vertexIndex = 0; vertexIndex < spanningTree.Size; vertexIndex++)
-                    if (!processedVertexMarkers[vertexIndex])
-                        if (spanningTree.Vertices[vertexIndex].Degree == 1)
-                            return vertexIndex;
+                {
+                    if (processedVertexMarkers[vertexIndex])
+                        continue;
+                    if (spanningTree.Vertices[vertexIndex].Degree == 1)
+                        return vertexIndex;
+                }
                 return -1;
             };
 
