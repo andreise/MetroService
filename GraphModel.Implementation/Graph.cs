@@ -25,19 +25,13 @@ namespace GraphModel
         /// Is the graph implementation a directed.
         /// Returns False
         /// </summary>
-        public bool IsDirected
-        {
-            get { return false; }
-        }
+        public bool IsDirected => false;
 
         /// <summary>
         /// Is the graph implementation a loop-graph.
         /// Returns False
         /// </summary>
-        public bool IsLoopGraph
-        {
-            get { return false; }
-        }
+        public bool IsLoopGraph => false;
 
         /// <summary>
         /// The Adjacency Matrix
@@ -47,7 +41,7 @@ namespace GraphModel
         /// <summary>
         /// The Adjacency Matrix
         /// </summary>
-        IAdjacencyMatrix IGraph.AdjacencyMatrix { get { return this.AdjacencyMatrix; } }
+        IAdjacencyMatrix IGraph.AdjacencyMatrix => this.AdjacencyMatrix;
 
         /// <summary>
         /// The Vertex List
@@ -57,7 +51,7 @@ namespace GraphModel
         /// <summary>
         /// The Vertex List
         /// </summary>
-        IReadOnlyList<IVertex> IGraph.Vertices { get { return this.Vertices; } }
+        IReadOnlyList<IVertex> IGraph.Vertices => this.Vertices;
 
         /// <summary>
         /// Edge Changed Event

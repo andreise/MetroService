@@ -20,9 +20,8 @@ namespace GraphModel
         /// <summary>
         /// The Matrix Size
         /// </summary>
-        public int Size { get; }
+        private int Size { get; }
 
-        //protected readonly bool[][] edges;
         protected bool[][] Edges { get; }
 
         /// <summary>

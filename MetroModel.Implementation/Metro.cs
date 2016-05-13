@@ -28,7 +28,7 @@ namespace MetroModel
 
         public TaskCode TaskCode { get; }
 
-        string IMetro.TaskCode { get { return this.TaskCode.ToString(); } }
+        string IMetro.TaskCode => this.TaskCode.ToString();
 
         public string InputFileName { get; }
 
