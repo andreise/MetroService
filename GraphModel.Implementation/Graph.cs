@@ -257,7 +257,20 @@ namespace GraphModel
             Graph spanningForest = new Graph(this.Size);
 
             bool[] processedVertexMarkers = new bool[this.Size];
-            Stack<Tuple<int, int>> reachedVertexStack = new Stack<Tuple<int, int>>(); // Item1: vertex index, Item2: from reached vertex index
+
+            // TODO: Test the EdgeCount correctness and use the EdgeCount directly as the Stack capacity
+            var reachedVertexStack = new Stack<Tuple<int, int>>(
+                new Func<int>(
+                    () =>
+                    {
+                        if (this.EdgeCount < 0)
+                            return 0;
+                        if (this.EdgeCount > this.MaxEdgeCount)
+                            return this.MaxEdgeCount;
+                        return this.EdgeCount;
+                    }
+                )()
+            ); // Item1: vertex index, Item2: from reached vertex index
 
             do // external cycle for spanning forest searching
             {
