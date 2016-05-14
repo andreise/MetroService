@@ -14,13 +14,8 @@ namespace GraphModel
     /// <remarks>
     /// A simple graph is an unweighted, undirected graph containing no graph loops or multiple edges
     /// </remarks>
-    internal class Graph: IGraph
+    internal class Graph : IGraph
     {
-        /// <summary>
-        /// The Graph Size
-        /// </summary>
-        public int Size { get; }
-
         /// <summary>
         /// Is the graph implementation a directed.
         /// Returns False
@@ -32,6 +27,27 @@ namespace GraphModel
         /// Returns False
         /// </summary>
         public bool IsLoopGraph => false;
+
+        /// <summary>
+        /// The Graph Size
+        /// </summary>
+        public int Size { get; }
+
+        /// <summary>
+        /// The graph maximum edge count
+        /// </summary>
+        public int MaxEdgeCount { get; }
+
+        /// <summary>
+        /// The Edge Count
+        /// </summary>
+        public int EdgeCount { get; private set; }
+
+        /// <summary>
+        /// Calculates the edge count
+        /// </summary>
+        /// <returns>Returns the edge count</returns>
+        int IGraph.GetEdgeCount() => this.EdgeCount;
 
         /// <summary>
         /// The Adjacency Matrix
@@ -87,9 +103,29 @@ namespace GraphModel
 
             this.Size = size;
 
+            this.MaxEdgeCount = this.Size * (this.Size - 1) / 2;
+
             this.AdjacencyMatrix = new AdjacencyMatrix(this, this.Size);
-            this.AdjacencyMatrix.EdgeChanged += (sender, e) => this.OnEdgeChanged(e);
-            this.AdjacencyMatrix.AllEdgesSetted += (sender, e) => this.OnAllEdgesSetted(e);
+
+            this.AdjacencyMatrix.EdgeChanged += (sender, e) =>
+            {
+                if (e.NewEdgeValue)
+                    this.EdgeCount++;
+                else
+                    this.EdgeCount--;
+
+                this.OnEdgeChanged(e);
+            };
+
+            this.AdjacencyMatrix.AllEdgesSetted += (sender, e) =>
+            {
+                if (e.NewEdgeValue)
+                    this.EdgeCount = this.MaxEdgeCount;
+                else
+                    this.EdgeCount = 0;
+
+                this.OnAllEdgesSetted(e);
+            };
 
             var vertexList = new Vertex[this.Size];
             for (int i = 0; i < vertexList.Length; i++)
@@ -112,6 +148,18 @@ namespace GraphModel
         }
 
         /// <summary>
+        /// Does the empty graph if the graph is not a null and is not a singleton graph,
+        /// otherwise does nothing
+        /// </summary>
+        public void DoEmpty() => this.AdjacencyMatrix.FillEdgesHelper(false);
+
+        /// <summary>
+        /// Does the complete graph if the graph is not a null and is not a singleton graph,
+        /// otherwise does nothing
+        /// </summary>
+        public void DoComplete() => this.AdjacencyMatrix.FillEdgesHelper(true);
+
+        /// <summary>
         /// Checks the graph is a null graph
         /// </summary>
         public bool IsNull => this.Size == 0;
@@ -125,13 +173,15 @@ namespace GraphModel
         /// Checks the graph is an empty, a null or a singleton graph
         /// </summary>
         /// <returns>Returns True if the graph is an empty, a null or a singleton graph, otherwise returns False</returns>
-        public bool IsEmpty() => this.AdjacencyMatrix.IsEmptyOrCompleteHelper(value => !value);
+        //public bool IsEmpty() => this.AdjacencyMatrix.IsEmptyOrCompleteHelper(value => !value);
+        public bool IsEmpty() => this.EdgeCount == 0;
 
         /// <summary>
         /// Checks the graph is a complete, not a null and not a singleton graph
         /// </summary>
         /// <returns>Returns True if the graph is a complete, not a null and not a singleton graph, otherwise returns False</returns>
-        public bool IsComplete() => this.Size >= 2 && this.AdjacencyMatrix.IsEmptyOrCompleteHelper(value => value);
+        //public bool IsComplete() => this.Size >= 2 && this.AdjacencyMatrix.IsEmptyOrCompleteHelper(value => value);
+        public bool IsComplete() => this.Size >= 2 && this.EdgeCount == this.MaxEdgeCount;
 
         /// <summary>
         /// Calculates the graph connectivity markers
@@ -330,18 +380,6 @@ namespace GraphModel
             IGraph spanningTree = this.GetSpanningForest(startVertexIndex);
             return GetSpanningTreeVertexDeletingSequenceHelper(spanningTree);
         }
-
-        /// <summary>
-        /// Does the empty graph if the graph is not a null and is not a singleton graph,
-        /// otherwise does nothing
-        /// </summary>
-        public void DoEmpty() => this.AdjacencyMatrix.FillEdgesHelper(false);
-
-        /// <summary>
-        /// Does the complete graph if the graph is not a null and is not a singleton graph,
-        /// otherwise does nothing
-        /// </summary>
-        public void DoComplete() => this.AdjacencyMatrix.FillEdgesHelper(true);
 
         /// <summary>
         /// Recalculates vertex degrees

@@ -15,11 +15,6 @@ namespace GraphModel
         where TAllEdgesSettedEventArgs: EventArgs, IAllEdgesSettedEventArgs
     {
         /// <summary>
-        /// The Graph Size
-        /// </summary>
-        int Size { get; }
-
-        /// <summary>
         /// Is the graph implementation a directed
         /// </summary>
         bool IsDirected { get; }
@@ -28,6 +23,54 @@ namespace GraphModel
         /// Is the graph implementation a loop-graph
         /// </summary>
         bool IsLoopGraph { get; }
+
+        /// <summary>
+        /// The Graph Size
+        /// </summary>
+        int Size { get; }
+
+        /// <summary>
+        /// The graph maximum edge count
+        /// </summary>
+        int MaxEdgeCount { get; }
+
+        /// <summary>
+        /// Calculates the edge count
+        /// </summary>
+        /// <returns>Returns the edge count</returns>
+        int GetEdgeCount();
+
+        /// <summary>
+        /// The Adjacency Matrix
+        /// </summary>
+        IAdjacencyMatrix AdjacencyMatrix { get; }
+
+        /// <summary>
+        /// The Vertex List
+        /// </summary>
+        IReadOnlyList<IVertex> Vertices { get; }
+
+        /// <summary>
+        /// Does the empty graph if the graph is not a null and is not a singleton graph,
+        /// otherwise does nothing
+        /// </summary>
+        void DoEmpty();
+
+        /// <summary>
+        /// Does the complete graph if the graph is not a null and is not a singleton graph,
+        /// otherwise does nothing
+        /// </summary>
+        void DoComplete();
+
+        /// <summary>
+        /// Edge Changed Event
+        /// </summary>
+        event EventHandler<TEdgeChangedEventArgs> EdgeChanged;
+
+        /// <summary>
+        /// All Edges Setted Event
+        /// </summary>
+        event EventHandler<TAllEdgesSettedEventArgs> AllEdgesSetted;
 
         /// <summary>
         /// Is the graph a null graph
@@ -88,38 +131,6 @@ namespace GraphModel
         /// Throws if the start vertex index is less than zero or equals to or greater than the graph size
         /// </exception>
         int[] GetConnectedGraphVertexDeletingSequence(int startVertexIndex);
-
-        /// <summary>
-        /// The Adjacency Matrix
-        /// </summary>
-        IAdjacencyMatrix AdjacencyMatrix { get; }
-
-        /// <summary>
-        /// The Vertex List
-        /// </summary>
-        IReadOnlyList<IVertex> Vertices { get; }
-
-        /// <summary>
-        /// Does the empty graph if the graph is not a null and is not a singleton graph,
-        /// otherwise does nothing
-        /// </summary>
-        void DoEmpty();
-
-        /// <summary>
-        /// Does the complete graph if the graph is not a null and is not a singleton graph,
-        /// otherwise does nothing
-        /// </summary>
-        void DoComplete();
-
-        /// <summary>
-        /// Edge Changed Event
-        /// </summary>
-        event EventHandler<TEdgeChangedEventArgs> EdgeChanged;
-
-        /// <summary>
-        /// All Edges Setted Event
-        /// </summary>
-        event EventHandler<TAllEdgesSettedEventArgs> AllEdgesSetted;
     }
 
 }
