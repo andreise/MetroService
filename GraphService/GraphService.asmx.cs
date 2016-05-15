@@ -37,7 +37,7 @@ namespace GraphService
         {
             try
             {
-                result = GraphServiceProvider.Default.GetConnectedGraphVertexDeletingSequence(inputXml);
+                result = GraphServiceProvider.Default.LoadGraphFromXml(inputXml).GetConnectedGraphVertexDeletingSequence(0);
                 errorMessage = null;
                 return true;
             }

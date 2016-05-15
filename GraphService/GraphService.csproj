@@ -74,6 +74,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GraphModel.Implementation\GraphModel.Implementation.csproj">
+      <Project>{d0763eca-48b7-42f5-9436-a00599d618b4}</Project>
+      <Name>GraphModel.Implementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GraphModel.Interfaces\GraphModel.Interfaces.csproj">
+      <Project>{81538278-9d36-4ac5-8eaa-5ac10e74143e}</Project>
+      <Name>GraphModel.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GraphService.Model.Implementation\GraphService.Model.Implementation.csproj">
       <Project>{8e5cc1cf-867f-4089-b690-45b02e6068a0}</Project>
       <Name>GraphService.Model.Implementation</Name>
