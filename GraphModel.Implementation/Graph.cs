@@ -6,7 +6,6 @@ using static System.FormattableString;
 
 namespace GraphModel
 {
-    using IGraph = IGraph<EdgeChangedEventArgs, AllEdgesSettedEventArgs>;
 
     /// <summary>
     /// Simple Graph
@@ -72,24 +71,24 @@ namespace GraphModel
         /// <summary>
         /// Edge Changed Event
         /// </summary>
-        public event EventHandler<EdgeChangedEventArgs> EdgeChanged;
+        public event EventHandler<AEdgeChangedEventArgs> EdgeChanged;
 
         /// <summary>
         /// Raises Edge Changed Event
         /// </summary>
         /// <param name="e">The Event Args</param>
-        protected virtual void OnEdgeChanged(EdgeChangedEventArgs e) => this.EdgeChanged?.Invoke(this, e);
+        protected virtual void OnEdgeChanged(AEdgeChangedEventArgs e) => this.EdgeChanged?.Invoke(this, e);
 
         /// <summary>
         /// All Edges Setted Event
         /// </summary>
-        public event EventHandler<AllEdgesSettedEventArgs> AllEdgesSetted;
+        public event EventHandler<AAllEdgesSettedEventArgs> AllEdgesSetted;
 
         /// <summary>
         /// Raises All Edges Setted Event
         /// </summary>
         /// <param name="e">The Event Args</param>
-        protected virtual void OnAllEdgesSetted(AllEdgesSettedEventArgs e) => this.AllEdgesSetted?.Invoke(this, e);
+        protected virtual void OnAllEdgesSetted(AAllEdgesSettedEventArgs e) => this.AllEdgesSetted?.Invoke(this, e);
 
         /// <summary>
         /// Constructor

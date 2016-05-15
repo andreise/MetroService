@@ -1,9 +1,6 @@
-﻿using System;
-
-namespace GraphModel
+﻿namespace GraphModel
 {
-    using IGraph = IGraph<EdgeChangedEventArgs, AllEdgesSettedEventArgs>;
-
+ 
     /// <summary>
     /// Graph Factory
     /// </summary>
@@ -23,4 +20,5 @@ namespace GraphModel
             return Graph.Create(size);
         }
     }
+
 }

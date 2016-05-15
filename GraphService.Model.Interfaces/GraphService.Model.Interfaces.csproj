@@ -39,10 +39,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GraphModel.Implementation\GraphModel.Implementation.csproj">
-      <Project>{d0763eca-48b7-42f5-9436-a00599d618b4}</Project>
-      <Name>GraphModel.Implementation</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GraphModel.Interfaces\GraphModel.Interfaces.csproj">
       <Project>{81538278-9d36-4ac5-8eaa-5ac10e74143e}</Project>
       <Name>GraphModel.Interfaces</Name>

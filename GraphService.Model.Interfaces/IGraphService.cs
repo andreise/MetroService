@@ -1,9 +1,7 @@
-﻿using System;
-using GraphModel;
+﻿using GraphModel;
 
 namespace GraphService.Model
 {
-    using IGraph = IGraph<EdgeChangedEventArgs, AllEdgesSettedEventArgs>;
 
     /// <summary>
     /// Simple Graph Service

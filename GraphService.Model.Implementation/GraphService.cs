@@ -6,7 +6,6 @@ using GraphModel;
 
 namespace GraphService.Model
 {
-    using IGraph = IGraph<EdgeChangedEventArgs, AllEdgesSettedEventArgs>;
 
     internal sealed class GraphXmlFormatException: Exception
     {

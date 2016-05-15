@@ -10,9 +10,7 @@ namespace GraphModel
     /// <remarks>
     /// A simple graph is an unweighted, undirected graph containing no graph loops or multiple edges
     /// </remarks>
-    public interface IGraph<TEdgeChangedEventArgs, TAllEdgesSettedEventArgs>
-        where TEdgeChangedEventArgs: EventArgs, IEdgeChangedEventArgs
-        where TAllEdgesSettedEventArgs: EventArgs, IAllEdgesSettedEventArgs
+    public interface IGraph
     {
         /// <summary>
         /// Is the graph implementation a directed
@@ -65,12 +63,12 @@ namespace GraphModel
         /// <summary>
         /// Edge Changed Event
         /// </summary>
-        event EventHandler<TEdgeChangedEventArgs> EdgeChanged;
+        event EventHandler<AEdgeChangedEventArgs> EdgeChanged;
 
         /// <summary>
         /// All Edges Setted Event
         /// </summary>
-        event EventHandler<TAllEdgesSettedEventArgs> AllEdgesSetted;
+        event EventHandler<AAllEdgesSettedEventArgs> AllEdgesSetted;
 
         /// <summary>
         /// Is the graph a null graph
@@ -117,7 +115,7 @@ namespace GraphModel
         /// <returns>Returns the graph spanning forest</returns>
         /// <exception cref="InvalidOperationException">Throws if the graph is a null graph</exception>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the start vertex index is less than zero or equals to or greater than the graph size</exception>
-        IGraph<TEdgeChangedEventArgs, TAllEdgesSettedEventArgs> GetSpanningForest(int startVertexIndex);
+        IGraph GetSpanningForest(int startVertexIndex);
 
         /// <summary>
         /// Calculates a vertex deleting sequence for the connected graph

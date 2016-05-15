@@ -7,30 +7,17 @@ namespace GraphModel
     /// <summary>
     /// Graph Edge Changed Event Args
     /// </summary>
-    public class EdgeChangedEventArgs : EventArgs, IEdgeChangedEventArgs
+    internal class EdgeChangedEventArgs : AEdgeChangedEventArgs
     {
-        /// <summary>
-        /// The first vertex index
-        /// </summary>
-        public int FirstVertexIndex { get; }
 
         /// <summary>
-        /// The second vertex index
-        /// </summary>
-        public int SecondVertexIndex { get; }
-
-        /// <summary>
-        /// New Edge Value
-        /// </summary>
-        public bool NewEdgeValue { get; }
-
-        /// <summary>
-        /// Checks vertex indexes are correct
+        /// Checks argument values are correct
         /// </summary>
         /// <param name="firstVertexIndex">The first vertex index</param>
         /// <param name="secondVertexIndex">The second vertex index</param>
-        /// <exception cref="ArgumentOutOfRangeException">Throws if the the first vertex index and the second vertex is equal to or less than zero</exception>
-        protected virtual void CheckVertexIndexes(int firstVertexIndex, int secondVertexIndex)
+        /// <param name="newEdgeValue">The new edge value</param>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the first vertex index or the second vertex is equal to or less than zero</exception>
+        protected override void CheckArgs(int firstVertexIndex, int secondVertexIndex, bool newEdgeValue)
         {
             Action<string, int> checkIndex = (indexName, index) =>
             {
@@ -47,37 +34,33 @@ namespace GraphModel
         /// <param name="firstVertexIndex">The first vertex index</param>
         /// <param name="secondVertexIndex">The second vertex index</param>
         /// <param name="newEdgeValue">The new edge value</param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Throws if the the first vertex index and the second vertex is equal to or less than zero,
-        /// or if the the first vertex index and the second vertex index are equal
-        /// </exception>
-        protected internal EdgeChangedEventArgs(int firstVertexIndex, int secondVertexIndex, bool newEdgeValue) : base()
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the first vertex index or the second vertex is equal to or less than zero</exception>
+        protected internal EdgeChangedEventArgs(int firstVertexIndex, int secondVertexIndex, bool newEdgeValue) : base(firstVertexIndex, secondVertexIndex, newEdgeValue)
         {
-            this.CheckVertexIndexes(firstVertexIndex, secondVertexIndex);
-
-            this.FirstVertexIndex = firstVertexIndex;
-            this.SecondVertexIndex = secondVertexIndex;
-            this.NewEdgeValue = newEdgeValue;
         }
+
     }
 
     /// <summary>
     /// Graph All Edges Setted Event Args
     /// </summary>
-    public class AllEdgesSettedEventArgs : EventArgs, IAllEdgesSettedEventArgs
+    internal class AllEdgesSettedEventArgs : AAllEdgesSettedEventArgs
     {
+
         /// <summary>
-        /// New Edge Value
+        /// Checks argument values are correct
         /// </summary>
-        public bool NewEdgeValue { get; }
+        /// <param name="newEdgeValue">The new edge value</param>
+        protected override void CheckArgs(bool newEdgeValue)
+        {
+        }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="newEdgeValue">The new edge value</param>
-        protected internal AllEdgesSettedEventArgs(bool newEdgeValue) : base()
+        protected internal AllEdgesSettedEventArgs(bool newEdgeValue) : base(newEdgeValue)
         {
-            this.NewEdgeValue = newEdgeValue;
         }
 
     }
