@@ -134,7 +134,8 @@ namespace MetroModel
                     if (headerItems.Length > 2)
                         throw new UnexpectedFileFormatException(getUnexpectedFormatMessage("the file header contains too much parameters"));
 
-                    Func<string, int> ParseInt32 = s => Int32.Parse(s, NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
+                    Func<string, int> ParseInt32 = s => Int32.Parse(s, NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, NumberFormatInfo.InvariantInfo);
+
                     Func<string, string, int> ParseInt32Parameter = (paramName, paramValueString) =>
                     {
                         try
