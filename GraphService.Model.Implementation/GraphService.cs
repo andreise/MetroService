@@ -87,7 +87,6 @@ namespace GraphService.Model
                     graph.AdjacencyMatrix[vertex1, vertex2] = true;
                 }
 
-
                 return graph;
             }
             catch (Exception e) when (

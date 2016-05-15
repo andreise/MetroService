@@ -179,6 +179,7 @@ namespace GraphModel
         /// </exception>
         public virtual bool this[int row, int column]
         {
+
             get
             {
                 this.CheckNullGraphAndRowAndColumn(row, column);
@@ -208,6 +209,7 @@ namespace GraphModel
                     this.OnEdgeChanged(new EdgeChangedEventArgs(Math.Min(row, column), Math.Max(row, column), value));
                 }
             }
+
         }
     }
 
