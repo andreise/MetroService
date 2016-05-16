@@ -24,7 +24,7 @@ namespace GraphService
         {
             string message = Invariant($"{e.Message} ({e.GetType()})");
             if ((object)e.InnerException != null)
-                message += Invariant($": {e.Message} ({e.GetType()})");
+                message += Invariant($": {e.InnerException.Message} ({e.InnerException.GetType()})");
             return message;
         }
 
