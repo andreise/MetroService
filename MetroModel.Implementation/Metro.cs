@@ -254,12 +254,11 @@ namespace MetroModel
         {
             using (var graphService = new GraphService())
             {
-                int[] sequence;
-                string errorMessage;
                 string inputXml = LoadInputTextToXml(this.InputFileName);
-                if (!graphService.GetConnectedGraphVertexDeletingSequence(inputXml, out sequence, out errorMessage))
-                    throw new GraphServiceErrorWrapperException(errorMessage);
-                SaveSequenceToFile(this.OutputFileName, sequence);
+                var result = graphService.GetConnectedGraphVertexDeletingSequence(inputXml);
+                if (!result.Success)
+                    throw new GraphServiceErrorWrapperException(result.ErrorMessage);
+                SaveSequenceToFile(this.OutputFileName, result.Sequence);
             }
         }
 

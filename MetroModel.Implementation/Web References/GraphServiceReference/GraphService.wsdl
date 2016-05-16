@@ -12,12 +12,25 @@
       <s:element name="GetConnectedGraphVertexDeletingSequenceResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="GetConnectedGraphVertexDeletingSequenceResult" type="s:boolean" />
-            <s:element minOccurs="0" maxOccurs="1" name="result" type="tns:ArrayOfInt" />
-            <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="GetConnectedGraphVertexDeletingSequenceResult" type="tns:GetConnectedGraphVertexDeletingSequenceResult" />
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:complexType name="GetConnectedGraphVertexDeletingSequenceResult">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:WebServiceResult">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Sequence" type="tns:ArrayOfInt" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="WebServiceResult">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Success" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+        </s:sequence>
+      </s:complexType>
       <s:complexType name="ArrayOfInt">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="unbounded" name="int" type="s:int" />

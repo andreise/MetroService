@@ -22,30 +22,28 @@ namespace GraphService
 
         private static string GetErrorMessage(Exception e)
         {
-            return Invariant($"{e.Message} ({e.GetType()})");
+            string message = Invariant($"{e.Message} ({e.GetType()})");
+            if ((object)e.InnerException != null)
+                message += Invariant($": {e.Message} ({e.GetType()})");
+            return message;
         }
 
         /// <summary>
         /// Calculates the vertex deleting sequence for the connected graph
         /// </summary>
         /// <param name="inputXml">The graph description in the xml format</param>
-        /// <param name="result">The vertex deleting sequence for the connected graph if executed successfully, otherwise the null value</param>
-        /// <param name="errorMessage">An error message if execution failed, otherwise the null value</param>
-        /// <returns>Returns True if executed successfully, otherwise returns False</returns>
+        /// <returns>Returns GetConnectedGraphVertexDeletingSequenceResult instance</returns>
         [WebMethod]
-        public bool GetConnectedGraphVertexDeletingSequence(string inputXml, out int[] result, out string errorMessage)
+        public GetConnectedGraphVertexDeletingSequenceResult GetConnectedGraphVertexDeletingSequence(string inputXml)
         {
             try
             {
-                result = GraphServiceProvider.Default.LoadGraphFromXml(inputXml).GetConnectedGraphVertexDeletingSequence(0);
-                errorMessage = null;
-                return true;
+                int[] sequence = GraphServiceProvider.Default.LoadGraphFromXml(inputXml).GetConnectedGraphVertexDeletingSequence(0);
+                return new GetConnectedGraphVertexDeletingSequenceResult() { Success = true, ErrorMessage = null, Sequence = sequence };
             }
-            catch (Exception e)
+            catch (Exception e) when (e is ArgumentException || e is InvalidOperationException)
             {
-                result = null;
-                errorMessage = GetErrorMessage(e);
-                return false;
+                return new GetConnectedGraphVertexDeletingSequenceResult() { Success = false, ErrorMessage = GetErrorMessage(e), Sequence = null };
             }
         }
     }

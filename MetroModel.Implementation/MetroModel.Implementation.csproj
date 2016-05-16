@@ -83,6 +83,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Web References\GraphServiceReference\GetConnectedGraphVertexDeletingSequenceResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\GraphServiceReference\GraphService.disco" />
     <None Include="Web References\GraphServiceReference\GraphService.wsdl" />
     <None Include="Web References\GraphServiceReference\Reference.map">

@@ -27,6 +27,7 @@ namespace MetroModel.GraphServiceReference {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="GraphServiceSoap", Namespace="http://andreysergeev.org/graphservice")]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(WebServiceResult))]
     public partial class GraphService : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
         private System.Threading.SendOrPostCallback GetConnectedGraphVertexDeletingSequenceOperationCompleted;
@@ -74,12 +75,10 @@ namespace MetroModel.GraphServiceReference {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://andreysergeev.org/graphservice/GetConnectedGraphVertexDeletingSequence", RequestNamespace="http://andreysergeev.org/graphservice", ResponseNamespace="http://andreysergeev.org/graphservice", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool GetConnectedGraphVertexDeletingSequence(string inputXml, out int[] result, out string errorMessage) {
+        public GetConnectedGraphVertexDeletingSequenceResult GetConnectedGraphVertexDeletingSequence(string inputXml) {
             object[] results = this.Invoke("GetConnectedGraphVertexDeletingSequence", new object[] {
                         inputXml});
-            result = ((int[])(results[1]));
-            errorMessage = ((string)(results[2]));
-            return ((bool)(results[0]));
+            return ((GetConnectedGraphVertexDeletingSequenceResult)(results[0]));
         }
         
         /// <remarks/>
@@ -123,6 +122,61 @@ namespace MetroModel.GraphServiceReference {
     }
     
     /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://andreysergeev.org/graphservice")]
+    public partial class GetConnectedGraphVertexDeletingSequenceResult : WebServiceResult {
+        
+        private int[] sequenceField;
+        
+        /// <remarks/>
+        public int[] Sequence {
+            get {
+                return this.sequenceField;
+            }
+            set {
+                this.sequenceField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetConnectedGraphVertexDeletingSequenceResult))]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://andreysergeev.org/graphservice")]
+    public partial class WebServiceResult {
+        
+        private bool successField;
+        
+        private string errorMessageField;
+        
+        /// <remarks/>
+        public bool Success {
+            get {
+                return this.successField;
+            }
+            set {
+                this.successField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ErrorMessage {
+            get {
+                return this.errorMessageField;
+            }
+            set {
+                this.errorMessageField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void GetConnectedGraphVertexDeletingSequenceCompletedEventHandler(object sender, GetConnectedGraphVertexDeletingSequenceCompletedEventArgs e);
     
@@ -140,26 +194,10 @@ namespace MetroModel.GraphServiceReference {
         }
         
         /// <remarks/>
-        public bool Result {
+        public GetConnectedGraphVertexDeletingSequenceResult Result {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((bool)(this.results[0]));
-            }
-        }
-        
-        /// <remarks/>
-        public int[] result {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((int[])(this.results[1]));
-            }
-        }
-        
-        /// <remarks/>
-        public string errorMessage {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((string)(this.results[2]));
+                return ((GetConnectedGraphVertexDeletingSequenceResult)(this.results[0]));
             }
         }
     }
