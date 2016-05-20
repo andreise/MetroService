@@ -22,7 +22,7 @@ namespace GraphModel
             Action<string, int> checkIndex = (indexName, index) =>
             {
                 if (index < 0)
-                    throw new ArgumentOutOfRangeException(indexName, Invariant($"The vertex index must be equal to or greater than zero (index: {index})."));
+                    throw new ArgumentOutOfRangeException(indexName, index, "The vertex index must be equal to or greater than zero.");
             };
             checkIndex(nameof(firstVertexIndex), firstVertexIndex);
             checkIndex(nameof(secondVertexIndex), secondVertexIndex);
