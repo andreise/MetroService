@@ -22,7 +22,7 @@ namespace MetroModel
         public const string OutputFile = "/out:";
     }
 
-    internal sealed class Metro: IMetro
+    internal sealed class Metro : IMetro
     {
         private const int MaxStations = 1000;
 
@@ -142,7 +142,7 @@ namespace MetroModel
                         {
                             return ParseInt32(paramValueString);
                         }
-                        catch(Exception e) when (e is ArgumentException || e is FormatException || e is OverflowException)
+                        catch (Exception e) when (e is ArgumentException || e is FormatException || e is OverflowException)
                         {
                             throw new UnexpectedFileFormatException(
                                 getUnexpectedFormatMessage($"the '{paramName}' parameter value ({paramValueString}) has an unexpected format."),

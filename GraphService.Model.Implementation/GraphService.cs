@@ -7,9 +7,9 @@ using GraphModel;
 namespace GraphService.Model
 {
 
-    internal sealed class GraphXmlFormatException: Exception
+    internal sealed class GraphXmlFormatException : Exception
     {
-        public GraphXmlFormatException(string message): base(message) { }
+        public GraphXmlFormatException(string message) : base(message) { }
     }
 
     /// <summary>
@@ -34,10 +34,7 @@ namespace GraphService.Model
             if ((object)inputXml == null)
                 throw new ArgumentNullException(nameof(inputXml));
 
-            Func<string, string> getInvalidInputFormatMessage = (description) =>
-            {
-                return Invariant($"The input xml is in the invalid format: {description}.");
-            };
+            Func<string, string> getInvalidInputFormatMessage = description => Invariant($"The input xml is in the invalid format: {description}.");
 
             try
             {
@@ -57,9 +54,9 @@ namespace GraphService.Model
                 else if (graph.IsDirected)
                     maxEdgeCount = graph.Size * (graph.Size - 1);
                 else if (graph.IsLoopGraph)
-                    maxEdgeCount = graph.Size * (graph.Size - 1) / 2 + graph.Size;
+                    maxEdgeCount = (graph.Size * (graph.Size - 1)) / 2 + graph.Size;
                 else
-                    maxEdgeCount = graph.Size * (graph.Size - 1) / 2;
+                    maxEdgeCount = (graph.Size * (graph.Size - 1)) / 2;
 
                 XmlNodeList edgeNodes = inputXmlDoc.SelectNodes("/Graph/Edges/Edge");
 
@@ -115,6 +112,9 @@ namespace GraphService.Model
         /// <remarks>Supports directed or loop-graphs if the IGraph implements a directed or a loop-graph</remarks>
         public virtual string SaveGraphToXml(IGraph graph)
         {
+            if ((object)graph == null)
+                throw new ArgumentNullException("graph");
+
             StringBuilder builder = new StringBuilder();
 
             using (XmlWriter writer = XmlWriter.Create(builder, new XmlWriterSettings() { Indent = true }))
@@ -125,34 +125,34 @@ namespace GraphService.Model
 
                 writer.WriteElementString("Size", XmlConvert.ToString(graph.Size));
 
-                Action<int, int> writeEdge = (row, column) =>
+                Action<int, int> processEdge = (row, column) =>
                 {
-                    if (graph.AdjacencyMatrix[row, column])
-                    {
-                        writer.WriteStartElement("Edge");
-                        writer.WriteElementString("Vertex1", XmlConvert.ToString(row));
-                        writer.WriteElementString("Vertex2", XmlConvert.ToString(column));
-                        writer.WriteEndElement(); // Edge
-                    }
+                    if (!graph.AdjacencyMatrix[row, column])
+                        return;
+
+                    writer.WriteStartElement("Edge");
+                    writer.WriteElementString("Vertex1", XmlConvert.ToString(row));
+                    writer.WriteElementString("Vertex2", XmlConvert.ToString(column));
+                    writer.WriteEndElement(); // Edge
                 };
 
                 if (graph.IsDirected)
                 {
                     for (int row = 0; row < graph.Size; row++)
                         for (int column = 0; column < graph.Size; column++)
-                            writeEdge(row, column);
+                            processEdge(row, column);
                 }
                 else if (graph.IsLoopGraph)
                 {
                     for (int row = 0; row < graph.Size; row++)
                         for (int column = row; column < graph.Size; column++)
-                            writeEdge(row, column);
+                            processEdge(row, column);
                 }
                 else
                 {
                     for (int row = 0; row < graph.Size - 1; row++)
                         for (int column = row + 1; column < graph.Size; column++)
-                            writeEdge(row, column);
+                            processEdge(row, column);
                 }
 
                 writer.WriteEndElement(); // Edges

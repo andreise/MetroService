@@ -102,7 +102,7 @@ namespace GraphModel
 
             this.Size = size;
 
-            this.MaxEdgeCount = this.Size * (this.Size - 1) / 2;
+            this.MaxEdgeCount = (this.Size * (this.Size - 1)) / 2;
 
             this.AdjacencyMatrix = new AdjacencyMatrix(this, this.Size);
 

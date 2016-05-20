@@ -1,5 +1,4 @@
 ﻿using System;
-using static System.FormattableString;
 
 namespace GraphModel
 {
