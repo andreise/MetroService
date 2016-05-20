@@ -35,7 +35,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AEventArgs.cs" />
+    <Compile Include="EventArgs.cs" />
     <Compile Include="IAdjacencyMatrix.cs" />
     <Compile Include="IGraph.cs" />
     <Compile Include="IVertex.cs" />

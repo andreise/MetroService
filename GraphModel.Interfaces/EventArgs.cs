@@ -6,7 +6,7 @@ namespace GraphModel
     /// <summary>
     /// Graph Edge Changed Event Args
     /// </summary>
-    public abstract class AEdgeChangedEventArgs : EventArgs
+    public abstract class EdgeChangedEventArgs : EventArgs
     {
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace GraphModel
         /// <param name="secondVertexIndex">The second vertex index</param>
         /// <param name="newEdgeValue">The new edge value</param>
         /// <exception cref="ArgumentOutOfRangeException">Throws if argument values are in an invalid state</exception>
-        public AEdgeChangedEventArgs(int firstVertexIndex, int secondVertexIndex, bool newEdgeValue)
+        public EdgeChangedEventArgs(int firstVertexIndex, int secondVertexIndex, bool newEdgeValue)
         {
             this.CheckArgs(firstVertexIndex, secondVertexIndex, newEdgeValue);
 
@@ -55,7 +55,7 @@ namespace GraphModel
     /// <summary>
     /// Graph All Edges Setted Event Args
     /// </summary>
-    public abstract class AAllEdgesSettedEventArgs : EventArgs
+    public abstract class AllEdgesSettedEventArgs : EventArgs
     {
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace GraphModel
         /// </summary>
         /// <param name="newEdgeValue">The new edge value</param>
         /// <exception cref="ArgumentOutOfRangeException">Throws if argument values are in an invalid state</exception>
-        public AAllEdgesSettedEventArgs(bool newEdgeValue)
+        public AllEdgesSettedEventArgs(bool newEdgeValue)
         {
             this.CheckArgs(newEdgeValue);
 

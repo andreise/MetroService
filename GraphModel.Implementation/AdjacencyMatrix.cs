@@ -42,24 +42,24 @@ namespace GraphModel
         /// <summary>
         /// Edge Changed Event
         /// </summary>
-        public event EventHandler<AEdgeChangedEventArgs> EdgeChanged;
+        public event EventHandler<EdgeChangedEventArgs> EdgeChanged;
 
         /// <summary>
         /// Raises Edge Changed Event
         /// </summary>
         /// <param name="e">Event Args</param>
-        protected virtual void OnEdgeChanged(AEdgeChangedEventArgs e) => this.EdgeChanged?.Invoke(this, e);
+        protected virtual void OnEdgeChanged(EdgeChangedEventArgs e) => this.EdgeChanged?.Invoke(this, e);
 
         /// <summary>
         /// All Edges Setted Event
         /// </summary>
-        public event EventHandler<AAllEdgesSettedEventArgs> AllEdgesSetted;
+        public event EventHandler<AllEdgesSettedEventArgs> AllEdgesSetted;
 
         /// <summary>
         /// Raises All Edges Setted Event
         /// </summary>
         /// <param name="e">Event Args</param>
-        protected virtual void OnAllEdgesSetted(AAllEdgesSettedEventArgs e) => this.AllEdgesSetted?.Invoke(this, e);
+        protected virtual void OnAllEdgesSetted(AllEdgesSettedEventArgs e) => this.AllEdgesSetted?.Invoke(this, e);
 
         /// <summary>
         /// Constructor
@@ -127,7 +127,7 @@ namespace GraphModel
             );
 
             if (changed)
-                OnAllEdgesSetted(new AllEdgesSettedEventArgs(value));
+                OnAllEdgesSetted(new AllEdgesSettedImplEventArgs(value));
         }
 
         /// <summary>
@@ -146,22 +146,24 @@ namespace GraphModel
             );
         }
 
-        private void CheckIndex(string indexName, int index)
-        {
-            if (index < 0 || index >= this.Size)
-                throw new ArgumentOutOfRangeException(indexName, index, Invariant($"The '{indexName}' must be equal to or greater than zero and less than the matrix size."));
-        }
-
-        private void CheckNullGraphAndRowAndColumn(int row, int column)
+        private void CheckNullGraph()
         {
             if (this.Size == 0)
                 throw new ArgumentOutOfRangeException("The graph is a null graph.");
-
-            this.CheckIndex(nameof(row), row);
-            this.CheckIndex(nameof(column), column);
         }
 
-        private Tuple<int, int> GetIndexesFromRowAndColumn(int row, int column) =>
+        private void CheckRowAndColumn(int row, int column)
+        {
+            Action<string, int> checkIndex = (string indexName, int index) =>
+            {
+                if (index < 0 || index >= this.Size)
+                    throw new ArgumentOutOfRangeException(indexName, index, Invariant($"The '{indexName}' must be equal to or greater than zero and less than the matrix size."));
+            };
+            checkIndex(nameof(row), row);
+            checkIndex(nameof(column), column);
+        }
+
+        private static Tuple<int, int> GetInternalIndicesFromRowAndColumn(int row, int column) =>
             column > row ?
             Tuple.Create(column - 1, row) :
             Tuple.Create(row - 1, column);
@@ -182,31 +184,39 @@ namespace GraphModel
 
             get
             {
-                this.CheckNullGraphAndRowAndColumn(row, column);
+                this.CheckNullGraph();
+                this.CheckRowAndColumn(row, column);
+
                 if (row == column)
                     return false;
-                var indexes = GetIndexesFromRowAndColumn(row, column);
-                return this.Edges[indexes.Item1][indexes.Item2];
+
+                Tuple<int, int> indices = GetInternalIndicesFromRowAndColumn(row, column);
+                return this.Edges[indices.Item1][indices.Item2];
             }
 
             set
             {
-                this.CheckNullGraphAndRowAndColumn(row, column);
+                this.CheckNullGraph();
+                this.CheckRowAndColumn(row, column);
+
                 if (row == column)
                 {
                     if (value)
+                    {
                         throw new ArgumentOutOfRangeException(
                             Invariant($"{nameof(row)}/{nameof(column)}"),
                             row,
                             Invariant($"A simple graph cannot contain graph loops. A vertex cannot be connected with itself (the vertex index: {row}).")
                         );
+                    }
                     return;
                 }
-                var indexes = GetIndexesFromRowAndColumn(row, column);
-                if (this.Edges[indexes.Item1][indexes.Item2] != value)
+
+                Tuple<int, int> indices = GetInternalIndicesFromRowAndColumn(row, column);
+                if (this.Edges[indices.Item1][indices.Item2] != value)
                 {
-                    this.Edges[indexes.Item1][indexes.Item2] = value;
-                    this.OnEdgeChanged(new EdgeChangedEventArgs(Math.Min(row, column), Math.Max(row, column), value));
+                    this.Edges[indices.Item1][indices.Item2] = value;
+                    this.OnEdgeChanged(new EdgeChangedImplEventArgs(Math.Min(row, column), Math.Max(row, column), value));
                 }
             }
 

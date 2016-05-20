@@ -7,7 +7,7 @@ namespace GraphModel
     /// <summary>
     /// Graph Edge Changed Event Args
     /// </summary>
-    internal class EdgeChangedEventArgs : AEdgeChangedEventArgs
+    internal class EdgeChangedImplEventArgs : EdgeChangedEventArgs
     {
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace GraphModel
             Action<string, int> checkIndex = (indexName, index) =>
             {
                 if (index < 0)
-                    throw new ArgumentOutOfRangeException(indexName, "The vertex index must be equal to or greater than zero.");
+                    throw new ArgumentOutOfRangeException(indexName, Invariant($"The vertex index must be equal to or greater than zero (index: {index})."));
             };
             checkIndex(nameof(firstVertexIndex), firstVertexIndex);
             checkIndex(nameof(secondVertexIndex), secondVertexIndex);
@@ -35,7 +35,7 @@ namespace GraphModel
         /// <param name="secondVertexIndex">The second vertex index</param>
         /// <param name="newEdgeValue">The new edge value</param>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the first vertex index or the second vertex is equal to or less than zero</exception>
-        protected internal EdgeChangedEventArgs(int firstVertexIndex, int secondVertexIndex, bool newEdgeValue) : base(firstVertexIndex, secondVertexIndex, newEdgeValue)
+        protected internal EdgeChangedImplEventArgs(int firstVertexIndex, int secondVertexIndex, bool newEdgeValue) : base(firstVertexIndex, secondVertexIndex, newEdgeValue)
         {
         }
 
@@ -44,7 +44,7 @@ namespace GraphModel
     /// <summary>
     /// Graph All Edges Setted Event Args
     /// </summary>
-    internal class AllEdgesSettedEventArgs : AAllEdgesSettedEventArgs
+    internal class AllEdgesSettedImplEventArgs : AllEdgesSettedEventArgs
     {
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace GraphModel
         /// Constructor
         /// </summary>
         /// <param name="newEdgeValue">The new edge value</param>
-        protected internal AllEdgesSettedEventArgs(bool newEdgeValue) : base(newEdgeValue)
+        protected internal AllEdgesSettedImplEventArgs(bool newEdgeValue) : base(newEdgeValue)
         {
         }
 

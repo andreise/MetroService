@@ -71,24 +71,24 @@ namespace GraphModel
         /// <summary>
         /// Edge Changed Event
         /// </summary>
-        public event EventHandler<AEdgeChangedEventArgs> EdgeChanged;
+        public event EventHandler<EdgeChangedEventArgs> EdgeChanged;
 
         /// <summary>
         /// Raises Edge Changed Event
         /// </summary>
         /// <param name="e">The Event Args</param>
-        protected virtual void OnEdgeChanged(AEdgeChangedEventArgs e) => this.EdgeChanged?.Invoke(this, e);
+        protected virtual void OnEdgeChanged(EdgeChangedEventArgs e) => this.EdgeChanged?.Invoke(this, e);
 
         /// <summary>
         /// All Edges Setted Event
         /// </summary>
-        public event EventHandler<AAllEdgesSettedEventArgs> AllEdgesSetted;
+        public event EventHandler<AllEdgesSettedEventArgs> AllEdgesSetted;
 
         /// <summary>
         /// Raises All Edges Setted Event
         /// </summary>
         /// <param name="e">The Event Args</param>
-        protected virtual void OnAllEdgesSetted(AAllEdgesSettedEventArgs e) => this.AllEdgesSetted?.Invoke(this, e);
+        protected virtual void OnAllEdgesSetted(AllEdgesSettedEventArgs e) => this.AllEdgesSetted?.Invoke(this, e);
 
         /// <summary>
         /// Constructor

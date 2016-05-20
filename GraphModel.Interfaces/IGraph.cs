@@ -63,12 +63,12 @@ namespace GraphModel
         /// <summary>
         /// Edge Changed Event
         /// </summary>
-        event EventHandler<AEdgeChangedEventArgs> EdgeChanged;
+        event EventHandler<EdgeChangedEventArgs> EdgeChanged;
 
         /// <summary>
         /// All Edges Setted Event
         /// </summary>
-        event EventHandler<AAllEdgesSettedEventArgs> AllEdgesSetted;
+        event EventHandler<AllEdgesSettedEventArgs> AllEdgesSetted;
 
         /// <summary>
         /// Is the graph a null graph
