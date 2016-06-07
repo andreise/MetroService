@@ -116,15 +116,7 @@ namespace MetroModel
                     if ((object)header == null)
                         throw new UnexpectedFileFormatException(getUnexpectedFormatMessage("the file is empty"));
 
-                    Func<string, string[]> splitLine = line =>
-                    {
-                        string[] items = line.Split(new char[] { ' ', '\u0009' }, StringSplitOptions.RemoveEmptyEntries);
-                        List<string> newItems = new List<string>(items.Length);
-                        for (int i = 0; i < items.Length; i++)
-                            if (!string.IsNullOrWhiteSpace(items[i]))
-                                newItems.Add(items[i]);
-                        return newItems.ToArray();
-                    };
+                    Func<string, string[]> splitLine = line => line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
 
                     string[] headerItems = splitLine(header);
                     if (headerItems.Length == 0)
