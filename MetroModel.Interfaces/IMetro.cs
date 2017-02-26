@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MetroModel
+﻿namespace MetroModel
 {
 
     /// <summary>
